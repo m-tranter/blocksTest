@@ -15,7 +15,7 @@ jobs:
     steps:
     - uses: actions/checkout@v3
     - name: Build the Docker image
-      run: sudo apt-get install -y libsecret-1-0 && docker build . --file Dockerfile --tag blockstest:$(date +%s)
+      run: sudo apt-get install -y gnome-keyring && docker build . --file Dockerfile --tag blockstest:$(date +%s)
     - name: Contensis block push action
       uses: contensis/block-push@v1
 
