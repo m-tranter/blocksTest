@@ -15,7 +15,7 @@ jobs:
         run: docker build . --file Dockerfile --tag blockTest:$(date +%s)
   push:
     needs: build
-    runs-on: ubuntu-latest
+   
     steps:
       - uses: contensis/block-push@v1
         with:
