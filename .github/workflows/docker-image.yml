@@ -16,3 +16,11 @@ jobs:
     - uses: actions/checkout@v3
     - name: Build the Docker image
       run: docker build . --file Dockerfile --tag blockTest:$(date +%s)
+      
+    uses: contensis/block-push@v1
+    with:
+      block-id: blocksTest
+      alias: chesheast
+      project-id: website
+      client-id: ${{ secrets.CONTENSIS_CLIENT_ID }}
+      shared-secret: ${{ secrets.CONTENSIS_SHARED_SECRET }}
