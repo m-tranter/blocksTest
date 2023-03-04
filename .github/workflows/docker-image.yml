@@ -17,10 +17,10 @@ jobs:
     - name: Build the Docker image
       run: docker build . --file Dockerfile --tag blockTest:$(date +%s)
       
-    uses: block-push@v1
-    with:
-      block-id: blockstest
-      alias: chesheast
-      project-id: website
-      client-id: ${{ secrets.CLIENT_ID }}
-      shared-secret: ${{ secrets.SHARED_SECRET }}
+    - uses: contensis/block-push@v1
+      with:
+        block-id: blockstest
+        alias: chesheast
+        project-id: website
+        client-id: ${{ secrets.CLIENT_ID }}
+        shared-secret: ${{ secrets.SHARED_SECRET }}
