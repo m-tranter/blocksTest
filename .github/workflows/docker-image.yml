@@ -1,5 +1,4 @@
 
-name: Docker Image CI
 
 on:
   push:
@@ -8,15 +7,7 @@ on:
     branches: [ "main" ]
 
 jobs:
-  build:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-        run: docker build . --file Dockerfile --tag blockTest:$(date +%s)
-  push:
-    needs: build
-   
-    steps:
+
       - uses: contensis/block-push@v1
         with:
           block-id: blockstest
