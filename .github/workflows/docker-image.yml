@@ -19,7 +19,7 @@ jobs:
       
     uses: contensis/block-push@v1
     with:
-      block-id: blocksTest
+      block-id: blockstest
       alias: chesheast
       project-id: website
       client-id: ${{ secrets.CLIENT_ID }}
