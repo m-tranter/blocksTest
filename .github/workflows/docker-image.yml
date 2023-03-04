@@ -19,3 +19,10 @@ jobs:
     - name: Contensis block push action
       uses: contensis/block-push@v1
 
+      with:
+        block-id: blocktest
+        alias: chesheast
+        project-id: website
+        client-id: ${{ secrets.CONTENSIS_CLIENT_ID }}
+        shared-secret: ${{ secrets.CONTENSIS_SHARED_SECRET }}
+
