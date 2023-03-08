@@ -20,7 +20,7 @@ jobs:
       uses: contensis/cli-action@v1
 
       with:
-        block-id: blockstest
+        
         alias: chesheast
         project-id: website
         client-id: ${{ secrets.CLIENT_ID }}
