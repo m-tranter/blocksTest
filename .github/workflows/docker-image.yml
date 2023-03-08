@@ -19,7 +19,7 @@ jobs:
       
     
     - uses: contensis/block-push@v1
-    - name: Contensis block push action
+  
       with:
         block-id: blockstest
         alias: chesheast
