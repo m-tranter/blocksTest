@@ -25,6 +25,6 @@ jobs:
         block-id: blockstest
         alias: chesheast
         project-id: website
-        client-id: 43ed49e5-10a4-48a5-bc2e-b63c7675834d
-        shared-secret: 3a0368e7ac7f429fa04d37e04af031f8-ca07f710527d443999265d279705ce16-b886d40170be4ac38a9f4ebc8190d30b
+        client-id: 
+        shared-secret: 
 
