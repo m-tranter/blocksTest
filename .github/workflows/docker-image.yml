@@ -19,7 +19,7 @@ jobs:
       run: docker build . --file Dockerfile --tag blockstest:$(date +%s)
       
     
-    - uses: contensis/block-push@v1
+      uses: contensis/block-push@v1
     - name: Contensis block push action
       with:
         block-id: blockstest
