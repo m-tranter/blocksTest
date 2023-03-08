@@ -23,6 +23,6 @@ jobs:
         block-id: blocktest
         alias: chesheast
         project-id: website
-        client-id: ${{ secrets.CONTENSIS_CLIENT_ID }}
-        shared-secret: ${{ secrets.CONTENSIS_SHARED_SECRET }}
+        client-id: ${{ secrets.CLIENT_ID }}
+        shared-secret: ${{ secrets.SHARED_SECRET }}
 
