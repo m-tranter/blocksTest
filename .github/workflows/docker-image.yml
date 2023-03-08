@@ -13,7 +13,7 @@ jobs:
     steps:
     - uses: actions/checkout@v3
     - name: Build the Docker image
-      run: docker build . --file Dockerfile --tag blockstest:$(date +%s)
+      run: docker build . --file Dockerfile --tag blockstest:$(date +%s) blockstest
       
   job2:
     runs-on: ubuntu-latest
