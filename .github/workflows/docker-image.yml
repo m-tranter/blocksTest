@@ -1,3 +1,4 @@
+
 name: Docker Image CI
 
 on:
@@ -7,11 +8,22 @@ on:
     branches: [ "main" ]
 
 jobs:
-  build:
-    runs-on: ubuntu-latest
-    steps:
-    -name: Build the Docker image
-    uses: actions/checkout@v3
-    run: docker build . --file Dockerfile --tag blockstest:$(date +%s)
-  
 
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+    - name: Build the Docker image
+      run: docker build . --file Dockerfile --tag blockstest:$(date +%s)
+      
+    
+    - uses: contensis/block-push@v1
+    - name: Contensis block push action
+      with:
+        block-id: blockstest
+        alias: chesheast
+        project-id: website
+        client-id: ${{ secrets.CLIENT_ID }}
+        shared-secret: ${{ secrets.SHARED_SECRET }}
