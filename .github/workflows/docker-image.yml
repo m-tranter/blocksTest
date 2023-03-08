@@ -17,10 +17,9 @@ jobs:
     - name: Build the Docker image
       run: docker build . --file Dockerfile --tag blockstest:$(date +%s)
     - name: Contensis block push action
-      uses: contensis/cli-action@v1
-
+      uses: contensis/block-push@v1
       with:
-        
+        block-id: blockstest
         alias: chesheast
         project-id: website
         client-id: ${{ secrets.CLIENT_ID }}
