@@ -13,18 +13,5 @@ jobs:
     -name: Build the Docker image
     uses: actions/checkout@v3
     run: docker build . --file Dockerfile --tag blockstest:$(date +%s)
+  
 
-  push:
-    runs-on: ubuntu-latest
-    steps:
-    - name: Push block to Contensis
-    uses: contensis/cli-action@v1
-    with:
-      block-id: example-website-block
-      # auto-release: true # release the block straight away
-      alias: example-dev
-      project-id: website
-      client-id: ${{ secrets.CONTENSIS_CLIENT_ID }} # create secrets for actions
-      shared-secret: ${{ secrets.CONTENSIS_SHARED_SECRET }} # in repo settings
-      tag-repo: true # tag commit with block version
-      git-token: ${{ github.token }} # to allow the git tag
