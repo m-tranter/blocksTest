@@ -33,6 +33,7 @@ jobs:
         block-id: blockstest
         alias: chesheast
         project-id: website
+        auto-release: true
         client-id: ${{ secrets.CLIENT_ID }}
         shared-secret: ${{ secrets.SHARED_SECRET }}
         git-token: ${{ secrets.GIT_TOKEN }}
