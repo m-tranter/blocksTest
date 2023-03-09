@@ -26,6 +26,6 @@ jobs:
         project-id: website
         client-id: ${{ secrets.CLIENT_ID }}
         shared-secret: ${{ secrets.SHARED_SECRET }}
-        git-token: ${{ secrets.GIT_TOKEN}
+        git-token: ${{ secrets.GIT_TOKEN }}
 
 
