@@ -11,8 +11,18 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v3
+    - name: Docker login
+      env:
+        USER: ${{ secrets.DOCKER_USER }}
+        PASS: ${{ secrets.DOCKER_PASS }}
+      run: 
+        docker login -u $USER -p $PASS
+    
+    
+    
     - name: Build the Docker image
-      run: docker build . --file Dockerfile --tag blockstest
+      run: |
+      docker build . --file Dockerfile --tag blockstest
       
   job2:
     runs-on: ubuntu-latest
