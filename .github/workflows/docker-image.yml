@@ -21,7 +21,7 @@ jobs:
     - name: Build the Docker image
       run: docker build . --file Dockerfile --tag blockstest
     - name: Docker push
-      run: docker push blockstest
+      run: docker push antiloquax/blockstest:latest
       
   job2:
     runs-on: ubuntu-latest
