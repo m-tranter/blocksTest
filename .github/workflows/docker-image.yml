@@ -33,7 +33,7 @@ jobs:
         block-id: blockstest
         alias: chesheast
         project-id: website
-        image-uri: "/"
+        image-uri: "antiloquax/blockstest:latest "
         client-id: ${{ secrets.CLIENT_ID }}
         shared-secret: ${{ secrets.SHARED_SECRET }}
         git-token: ${{ secrets.GIT_TOKEN }}
