@@ -19,7 +19,7 @@ jobs:
         docker login -u $USER -p $PASS
     
     - name: Build the Docker image
-      run: docker build . --file Dockerfile --tag antiloquax/blockstest:latest
+      run: docker build . --file Dockerfile 
     - name: Docker push
       run: docker push antiloquax/blockstest:latest
       
@@ -33,7 +33,6 @@ jobs:
         block-id: blockstest
         alias: chesheast
         project-id: website
-        auto-release: true
         image-uri: "antiloquax/blockstest"
         client-id: ${{ secrets.CLIENT_ID }}
         shared-secret: ${{ secrets.SHARED_SECRET }}
