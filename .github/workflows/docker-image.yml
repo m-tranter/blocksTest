@@ -19,7 +19,7 @@ jobs:
         docker login -u $USER -p $PASS
     
     - name: Build the Docker image
-      run: docker build . --file Dockerfile 
+      run: docker build . --file Dockerfile --tag antiloquax/blockstest:latest
     - name: Docker push
       run: docker push antiloquax/blockstest:latest
       
