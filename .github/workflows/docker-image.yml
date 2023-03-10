@@ -32,7 +32,7 @@ jobs:
       with:
         block-id: blockstest
         alias: chesheast
-        project-id: website
+        project-id: blockstest
         image-uri: "antiloquax/blockstest:latest "
         client-id: ${{ secrets.CLIENT_ID }}
         shared-secret: ${{ secrets.SHARED_SECRET }}
