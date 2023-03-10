@@ -34,7 +34,7 @@ jobs:
         alias: chesheast
         project-id: website
         auto-release: true
-        image-uri: true
+        image-uri: antiloquax/blockstest
         client-id: ${{ secrets.CLIENT_ID }}
         shared-secret: ${{ secrets.SHARED_SECRET }}
         git-token: ${{ secrets.GIT_TOKEN }}
