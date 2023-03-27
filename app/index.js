@@ -16,5 +16,5 @@ app.listen(port, (error) => {
 
 app.use(express.static(dir));
 app.all('*', function(req, res) {
-  res.sendFile(path.join(__dirname, '/index.html'));
+  res.sendFile(path.join(__dirname, '../public', '/index.html'));
 });
