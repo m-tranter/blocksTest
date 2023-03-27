@@ -15,6 +15,6 @@ app.listen(port, (error) => {
 );
 
 app.use(express.static(dir));
-app.all('/blocks', function(req, res) {
+app.all('*', function(req, res) {
   res.sendFile(path.join(__dirname, '/index.html'));
 });
