@@ -22,7 +22,7 @@ async function getEntries(req, res) {
   );
   const data = await response.json();
   console.log(data.items ? `Got ${data.items.length} entries.` : 'No data.');
-  const queries = req.url.split('?');
+  const queries = req.url.split(/\?|&/);
   let entryId = queries.find((k) => k.startsWith('entryId'));
   let nodeId = queries.find((k) => k.startsWith('nodeId'));
   entryId = entryId ? entryId.slice(8) : 'Not found';
