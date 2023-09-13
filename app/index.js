@@ -30,7 +30,19 @@ app.use(express.json());
 app.use(express.static(dir));
 app.use(myLogger);
 
-app.all('/blockstest*', function (_, res) {
-  res.sendFile(path.join(dir, '/index.html'));
+app.all('/blockstest*', function (req, res) {
+    res.send(`
+<head>
+  <meta charset="UTF-8"/>
+  <link rel="stylesheet" href="style.css">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Express test</title>
+</head>
+<body>
+  <h1>Express test</h1>
+      <div id="app">${req.url.includes('?') ? req.url.split('?')[1]: "No query string received"}</div>
+      </body>
+      </html>
+      `);
 });
 

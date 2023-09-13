@@ -2,6 +2,10 @@
   --cec-green: #206c49;
 }
 
+html {
+  font-size: 19px;
+}
+
 h1 {
   color: var(--cec-green);
 }
