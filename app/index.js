@@ -15,6 +15,7 @@ const ROOT_URL = `https://cms-chesheast.cloud.contensis.com/`;
 const PROJECT = 'website';
 
 async function getEntries(req, res) {
+  // To Do - implement logic to render list or individual page.
   const response = await fetch(
     `${ROOT_URL}/api/delivery/projects/${PROJECT}/contenttypes/rangerEvents/entries?accessToken=QCpZfwnsgnQsyHHB3ID5isS43cZnthj6YoSPtemxFGtcH15I&versionStatus=latest`,
     { method: 'get' }
