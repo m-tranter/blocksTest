@@ -1,6 +1,11 @@
+'use strict';
 
-const express = require('express');
-const path = require('path');
+
+import express from 'express';
+import path from 'path';
+import { fileURLToPath } from 'url';
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+
 const app = express();
 const dir = path.join(__dirname, '../public');
 const port = 3001;
@@ -22,8 +27,10 @@ const myLogger = function (req, _, next) {
 
 // Middleware
 app.use(express.json());
+app.use(express.static(dir));
 app.use(myLogger);
 
-app.all('*', function(req, res) {
+app.all('/blockstest*', function (_, res) {
   res.sendFile(path.join(dir, '/index.html'));
 });
+
