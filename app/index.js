@@ -14,7 +14,16 @@ app.listen(port, (error) => {
 	}
 );
 
-app.use(express.static(dir));
+// Log all requests to the server.
+const myLogger = function (req, _, next) {
+    console.log(`Incoming: ${req.url}`);
+  next();
+};
+
+// Middleware
+app.use(express.json());
+app.use(myLogger);
+
 app.all('*', function(req, res) {
   res.sendFile(path.join(dir, '/index.html'));
 });
