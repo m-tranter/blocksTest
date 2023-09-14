@@ -20,6 +20,7 @@ async function getEntries(req, res) {
   let description = 'Description';
   let contentType;
   let items = [];
+
   if (entryId) {
     const res = await fetch(
       `${ROOT_URL}/api/delivery/projects/${PROJECT}/entries/${entryId}/?accessToken=QCpZfwnsgnQsyHHB3ID5isS43cZnthj6YoSPtemxFGtcH15I`,
@@ -44,7 +45,8 @@ async function getEntries(req, res) {
 
   const app = createApp(items);
   const itemsStr = JSON.stringify(items);
-  const template = `<div id="contentTypesContainer" class="row events-container"><div class="col-lg-8"> <nav role="navigation" aria-label="Results data navigation"> <ul class="pagination d-flex flex-wrap mb-2 ms-0"> <li class="page-item" v-bind:class="{ disabled: pageIndex === 0 }"> <button class="page-link" type="button" v-on:click="goToPage(pageIndex)" > Previous </button> </li> <li v-for="pagebtn in pageBtns" class="page-item" v-bind:class="{ disabled: pageIndex === pagebtn - 1 }" v-bind:key="pagebtn" > <button class="page-link" type="button" v-on:click="goToPage(pagebtn)" > {{ pagebtn }} </button> </li> <li class="page-item" v-bind:class="{ disabled: pageIndex + 1 === pageCount }" > <button class="page-link" type="button" v-on:click="goToPage(pageIndex + 2)" > Next </button> </li> </ul> </nav> </div></div><div class="api-results-info"><p>Total results: <strong>{{ totalCount }}</strong></p><p>Current page: <strong>{{ pageIndex + 1 }}</strong></p></div><div v-for="item in items" v-bind:key="item.sys.id" tabindex="0" class="linkDiv ranger-event-card card card-item flex-md-row align-items-center" > <a href="#"><span class="innerLink" ><span class="visually-hidden">{{ item.title }}</span></span ></a > <div class="col-12 col-md-5 thumbnail-container d-flex justify-content-center px-2" > <img v-if="item.image != null" class="img-fluid rounded featured-img" v-bind:src="prefix(item.image.asset.sys.uri)" v-bind:alt="item.title" /> </div> <div class="card-body col-12 col-md-7 text-center text-md-start ps-md-4 ps-xl-2" > <h2 class="fs-4">{{ item.entryTitle }}</h2> <template v-if=" formatDate(item.dateStartEnd.from) === formatDate(item.dateStartEnd.to) " > <p>{{ formatDate(item.dateStartEnd.from) }}.</p> <p> <strong>Time:</strong> {{ getTime(item.dateStartEnd.from) }} - {{ getTime(item.dateStartEnd.to) }}. </p> </template> <template v-else> <p> From {{ getTime(item.dateStartEnd.from) }} on {{ formatDate(item.dateStartEnd.from) }}. </p> <p> Until {{ getTime(item.dateStartEnd.to) }} on {{ formatDate(item.dateStartEnd.to) }}. </p> </template> <p>{{ item.excerpt }}</p> </div></div>`;
+
+  const template = `<div id="contentTypesContainer" class="row events-container"><div class="col-lg-8"> <nav role="navigation" aria-label="Results data navigation"> <ul class="pagination d-flex flex-wrap mb-2 ms-0"> <li class="page-item" v-bind:class="{ disabled: pageIndex === 0 }"> <button class="page-link" type="button" v-on:click="goToPage(pageIndex)" > Previous </button> </li> <li v-for="pagebtn in pageBtns" class="page-item" v-bind:class="{ disabled: pageIndex === pagebtn - 1 }" v-bind:key="pagebtn" > <button class="page-link" type="button" v-on:click="goToPage(pagebtn)" > {{ pagebtn }} </button> </li> <li class="page-item" v-bind:class="{ disabled: pageIndex + 1 === pageCount }" > <button class="page-link" type="button" v-on:click="goToPage(pageIndex + 2)" > Next </button> </li> </ul> </nav> </div></div><div class="api-results-info"><p>Total results: <strong>{{ totalCount }}</strong></p><p>Current page: <strong>{{ pageIndex + 1 }}</strong></p></div><div v-for="item in items" v-bind:key="item.sys.id" tabindex="0" class="linkDiv ranger-event-card card card-item flex-md-row align-items-center" > <a href="#"><span class="innerLink" ><span class="visually-hidden">{{ item.title }}</span></span ></a > <div class="col-12 col-md-5 thumbnail-container d-flex justify-content-center px-2" > <img v-if="item.image != null" class="img-fluid rounded featured-img" v-bind:src="prefix(item.image.asset.sys.uri)" v-bind:alt="item.title" /> </div> <div class="card-body col-12 col-md-7 text-center text-md-start ps-md-4 ps-xl-2" > <h2 class="fs-4">{{ item.entryTitle }}</h2> <template v-if=" formatDate(item.dateStartEnd.from) === formatDate(item.dateStartEnd.to) " > <p>{{ formatDate(item.dateStartEnd.from) }}.</p> <p> Time: {{ getTime(item.dateStartEnd.from) }} - {{ getTime(item.dateStartEnd.to) }}. </p> </template> <template v-else> <p> From {{ getTime(item.dateStartEnd.from) }} on {{ formatDate(item.dateStartEnd.from) }}. </p> <p> Until {{ getTime(item.dateStartEnd.to) }} on {{ formatDate(item.dateStartEnd.to) }}. </p> </template> <p>{{ item.excerpt }}</p> </div></div>`;
 
   renderToString(app).then((html) => {
     res.send(`
@@ -281,7 +283,7 @@ async function getEntries(req, res) {
       <p>Entry Id: ${entryId ? entryId : 'Not found.'}</p>
       <p>Content Type: ${contentType ? contentType : 'Not found'}</p>
       <hr />
-      <div id="app" class="mt-3"><div>${html}<div></div>
+      <div id="app" class="mt-3">${html}</div>
     </div>
     <footer>
       <div class="container py-2">
