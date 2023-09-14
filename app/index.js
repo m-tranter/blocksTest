@@ -34,6 +34,9 @@ async function getEntries(req, res) {
     title = data.title || title;
     description = data.description || description;
     contentType = data.contentTypeAPIName || '';
+    const type = data.listingPage || false;
+    console.log(`Listing page: ${type}`);
+    
     if (contentType) {
       const response = await fetch(
         `${ROOT_URL}/api/delivery/projects/${PROJECT}/contenttypes/${contentType}/entries?accessToken=QCpZfwnsgnQsyHHB3ID5isS43cZnthj6YoSPtemxFGtcH15I`,
@@ -290,10 +293,12 @@ async function getEntries(req, res) {
     </header>
     <div class="container mt-3">
       <h1>${title}</h1>
-      <p class="mb-0">Node Id: ${nodeId ? nodeId : 'Not found'}</p>
-      <p>Entry Id: ${entryId ? entryId : 'Not found.'}</p>
-      <p>Content Type: ${contentType ? contentType : 'Not found'}</p>
-      <hr />
+      <div class="d-none">
+        <p class="mb-0">Node Id: ${nodeId ? nodeId : 'Not found'}</p>
+        <p>Entry Id: ${entryId ? entryId : 'Not found.'}</p>
+        <p>Content Type: ${contentType ? contentType : 'Not found'}</p>
+        <hr />
+      </div>
       <div id="app" class="mt-3">${html}</div>
     </div>
     <footer>
@@ -331,4 +336,8 @@ server.get('/blockstest*', (req, res) => {
   getEntries(req, res);
 });
 
-
+/*
+ *server.all('*', function (_, res) {
+ *  res.sendFile(path.join(dir, '/index.html'));
+ *});
+ */
