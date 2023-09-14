@@ -4,7 +4,11 @@ import express from 'express';
 import { renderToString } from 'vue/server-renderer';
 import { createApp } from './app.js';
 import fetch from 'node-fetch';
+import path from 'path';
+import { fileURLToPath } from 'url';
 
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+const dir = path.join(__dirname, '../public');
 const server = express();
 const port = 3001;
 const ROOT_URL = `https://cms-chesheast.cloud.contensis.com/`;
@@ -64,6 +68,13 @@ async function getEntries(req, res) {
     />
     <link
       href="https://www.cheshireeast.gov.uk/siteelements/css/bs5/400-cec-styles.css"
+      rel="stylesheet"
+      type="text/css"
+    />
+	
+    <link
+      href="https://www.cheshireeast.gov.uk/SiteElements/css/bs5/600-events-vue-axios.css"
+"
       rel="stylesheet"
       type="text/css"
     />
@@ -316,6 +327,10 @@ const myLogger = function (req, _, next) {
 server.use(express.json());
 server.use(myLogger);
 
-server.get('/*', (req, res) => {
+server.get('/blockstest*', (req, res) => {
   getEntries(req, res);
+});
+
+server.all('*', function (_, res) {
+  res.sendFile(path.join(dir, '/index.html'));
 });
