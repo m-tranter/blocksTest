@@ -331,6 +331,4 @@ server.get('/blockstest*', (req, res) => {
   getEntries(req, res);
 });
 
-server.all('*', function (_, res) {
-  res.sendFile(path.join(dir, '/index.html'));
-});
+
