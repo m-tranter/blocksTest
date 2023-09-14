@@ -20,7 +20,6 @@ async function getEntries(req, res) {
   let description = 'Description';
   let contentType;
   let items = [];
-
   if (entryId) {
     const res = await fetch(
       `${ROOT_URL}/api/delivery/projects/${PROJECT}/entries/${entryId}/?accessToken=QCpZfwnsgnQsyHHB3ID5isS43cZnthj6YoSPtemxFGtcH15I`,
