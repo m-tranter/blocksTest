@@ -332,6 +332,12 @@ const myLogger = function (req, _, next) {
 server.use(express.json());
 server.use(myLogger);
 
-server.get('/*', (req, res) => {
+server.get('/blockstest*', (req, res) => {
   getEntries(req, res);
 });
+
+/*
+ *server.all('*', function (_, res) {
+ *  res.sendFile(path.join(dir, '/index.html'));
+ *});
+ */
