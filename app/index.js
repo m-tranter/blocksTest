@@ -334,7 +334,9 @@ server.use(express.json());
 server.use(myLogger);
 
 // Make sure request for .js files are fetched.
-server.get('/*.js/', function (req, res) {
+server.get('*.js', function (req, res) {
+  console.log("Fetching js.");
+  console.log(dir);
   let temp = req.url.split('?')[0].split('/');
   res.sendFile(path.join(dir, '/', temp[temp.length - 1]));
 });
