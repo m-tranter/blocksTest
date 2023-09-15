@@ -86,6 +86,7 @@ async function getEntries(req, res) {
       rel="stylesheet"
     />
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+      <script src="myScript.js"></script>
     <title>${title}</title>
     <script type="importmap">
       {
@@ -331,6 +332,12 @@ const myLogger = function (req, _, next) {
 // Middleware
 server.use(express.json());
 server.use(myLogger);
+
+// Make sure request for .js files are fetched.
+server.get('/*.js/', function (req, res) {
+  let temp = req.url.split('?')[0].split('/');
+  res.sendFile(path.join(dir, '/', temp[temp.length - 1]));
+});
 
 server.get('/*', (req, res) => {
   getEntries(req, res);
