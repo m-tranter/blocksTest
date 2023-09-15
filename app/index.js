@@ -332,7 +332,7 @@ const myLogger = function (req, _, next) {
 server.use(express.json());
 server.use(myLogger);
 
-server.get('/blockstest*', (req, res) => {
+server.get('/*', (req, res) => {
   getEntries(req, res);
 });
 
