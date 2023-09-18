@@ -333,7 +333,13 @@ const myLogger = function (req, _, next) {
 // Middleware
 server.use(express.json());
 server.use(myLogger);
-server.use(express.static(dir));
+
+// Custom route handler for serving JavaScript and CSS files
+server.get(/.*\.(js|css)$/, (req, res) => {
+  const filePath = path.join(dir, req.url);
+      res.sendFile(filePath);
+});
+
 server.get(/^(?!.*\.js|.*\.css)/, (req, res) => {
   getEntries(req, res);
 });
