@@ -336,6 +336,7 @@ server.use(myLogger);
 
 // Custom route handler for serving JavaScript and CSS files
 server.get(/.*\.(js|css)$/, (req, res) => {
+  console.log("Script request")
   const filePath = path.join(dir, req.url);
       res.sendFile(filePath);
 });
