@@ -25,6 +25,7 @@ async function getEntries(req, res) {
   let contentType;
   let items = [];
 
+  // Just an experiment to get the script into the client.
   if (entryId === '00000000-0000-0000-0000-000000000000') {
     const filePath = path.join(dir, 'myscript.js');
     res.sendFile(filePath);
