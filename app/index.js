@@ -25,7 +25,6 @@ async function getEntries(req, res) {
   let contentType;
   let items = [];
 
-  // Just an experiment to get the script into the client.
   if (entryId === '00000000-0000-0000-0000-000000000000') {
     const filePath = path.join(dir, 'myscript.js');
     res.sendFile(filePath);
@@ -94,7 +93,6 @@ async function getEntries(req, res) {
     />
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
       <script src="myscript.js"></script>
-      <link rel="stylesheet" href="style.css">
     <title>${title}</title>
     <script type="importmap">
       {
