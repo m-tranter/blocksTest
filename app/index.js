@@ -86,7 +86,8 @@ async function getEntries(req, res) {
       rel="stylesheet"
     />
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
-      <script src="/myScript.js"></script>
+      <script src="myScript.js"></script>
+      <link rel="stylesheet" href="style.css">
     <title>${title}</title>
     <script type="importmap">
       {
@@ -332,8 +333,8 @@ const myLogger = function (req, _, next) {
 // Middleware
 server.use(express.json());
 server.use(myLogger);
-
-server.get(/^(?!.*\.js$)/, (req, res) => {
+server.use(express.static(dir));
+server.get(/^(?!.*\.js|.*\.css)/, (req, res) => {
   getEntries(req, res);
 });
 
