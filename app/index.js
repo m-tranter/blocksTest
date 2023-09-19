@@ -6,6 +6,7 @@ import { createApp } from './app.js';
 import fetch from 'node-fetch';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import template from './template.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const dir = path.join(__dirname, '../public');
@@ -17,14 +18,13 @@ const PROJECT = 'website';
 async function getEntries(req, res) {
   const queries = req.url.split(/\?|&/);
   let entryId = queries.find((k) => k.startsWith('entryId'));
-  let nodeId = queries.find((k) => k.startsWith('nodeId'));
   entryId = entryId && entryId.slice(8);
-  nodeId = nodeId && nodeId.slice(7);
   let title = 'Title';
   let description = 'Description';
   let contentType;
   let items = [];
-
+  let type;
+  let item = {};
 
   if (entryId) {
     const res = await fetch(
@@ -35,8 +35,11 @@ async function getEntries(req, res) {
     title = data.title || title;
     description = data.description || description;
     contentType = data.contentTypeAPIName || '';
-    const type = data.listingPage || false;
-    console.log(`Listing page: ${type}`);
+    type = data.listingPage || false;
+    if (!type) {
+      item = data;
+      console.log(item);
+    }
 
     if (contentType) {
       const response = await fetch(
@@ -44,17 +47,13 @@ async function getEntries(req, res) {
         { method: 'get' }
       );
       const data = await response.json();
-      console.log(
-        data.items ? `Got ${data.items.length} entries.` : 'No data.'
-      );
       items = data.items;
     }
   }
 
-  const app = createApp(items);
+  const app = createApp(items, type, title, item);
   const itemsStr = JSON.stringify(items);
-
-  const template = `<div><div id="contentTypesContainer" class="row events-container"><div class="col-lg-8"> <nav role="navigation" aria-label="Results data navigation"> <ul class="pagination d-flex flex-wrap mb-2 ms-0"> <li class="page-item" v-bind:class="{ disabled: pageIndex === 0 }"> <button class="page-link" type="button" v-on:click="goToPage(pageIndex)" > Previous </button> </li> <li v-for="pagebtn in pageBtns" class="page-item" v-bind:class="{ disabled: pageIndex === pagebtn - 1 }" v-bind:key="pagebtn" > <button class="page-link" type="button" v-on:click="goToPage(pagebtn)" > {{ pagebtn }} </button> </li> <li class="page-item" v-bind:class="{ disabled: pageIndex + 1 === pageCount }" > <button class="page-link" type="button" v-on:click="goToPage(pageIndex + 2)" > Next </button> </li> </ul> </nav> </div></div><div class="api-results-info"><p>Total results: <strong>{{ totalCount }}</strong></p><p>Current page: <strong>{{ pageIndex + 1 }}</strong></p></div><div v-for="item in items" v-bind:key="item.sys.id" tabindex="0" class="linkDiv ranger-event-card card card-item flex-md-row align-items-center" > <a href="#"><span class="innerLink" ><span class="visually-hidden">{{ item.title }}</span></span ></a > <div class="col-12 col-md-5 thumbnail-container d-flex justify-content-center px-2" > <img v-if="item.image != null" class="img-fluid rounded featured-img" v-bind:src="prefix(item.image.asset.sys.uri)" v-bind:alt="item.title" /> </div> <div class="card-body col-12 col-md-7 text-center text-md-start ps-md-4 ps-xl-2" > <h2 class="fs-4">{{ item.entryTitle }}</h2> <template v-if=" formatDate(item.dateStartEnd.from) === formatDate(item.dateStartEnd.to) " > <p>{{ formatDate(item.dateStartEnd.from) }}.</p> <p> Time: {{ getTime(item.dateStartEnd.from) }} - {{ getTime(item.dateStartEnd.to) }}. </p> </template> <template v-else> <p> From {{ getTime(item.dateStartEnd.from) }} on {{ formatDate(item.dateStartEnd.from) }}. </p> <p> Until {{ getTime(item.dateStartEnd.to) }} on {{ formatDate(item.dateStartEnd.to) }}. </p> </template> <p>{{ item.excerpt }}</p> </div></div></div>`;
+  const itemStr = JSON.stringify(item);
 
   renderToString(app).then((html) => {
     res.send(`
@@ -101,6 +100,9 @@ async function getEntries(req, res) {
         function createApp(items) {
           return createSSRApp({
             data: () => ({
+            item: ${itemStr},
+            type: ${type},
+              h1: "${title}",
             items: [],
             pages: [],
             copyItems: ${itemsStr},
@@ -147,11 +149,22 @@ async function getEntries(req, res) {
             ],
           }),
           methods: {
+            cardLink: function(item) {
+              return "/rangerevents/" + item.sys.slug;
+            },
             clearAlert: function () {
               this.searchAlert = false;
             },
             prefix: function(str) {
               return "https://www.cheshireeast.gov.uk" + str;
+            },
+            gmap: function (item) {
+              return (
+                'https://maps.google.com/maps?q=' +
+                item.mapLocation.lat +
+                ',' +
+                item.mapLocation.lon
+              );
             },
             searchFilter: function () {
               console.log("In search filter");
@@ -171,9 +184,6 @@ async function getEntries(req, res) {
                   );
                 }),
               );
-              if (this.searchedItems.length > 0) {
-                this.searchedItems.sort(this.sortDate());
-              }
               this.calculatePages();
             },
             filterByCategories: function () {
@@ -208,7 +218,7 @@ async function getEntries(req, res) {
             createPages: function () {
               this.pages = [
                 ...Array(Math.ceil(this.searchedItems.length / this.pageSize)),
-              ].map((_) => this.searchedItems.splice(0, this.pageSize));
+              ].map(() => this.searchedItems.splice(0, this.pageSize));
             },
             goToPage: function (pageNum) {
               document.getElementById('contentTypesContainer').scrollIntoView();
@@ -227,10 +237,16 @@ async function getEntries(req, res) {
               this.filterByCategories();
               this.searchFilter();
             },
-            formatDate: function (value) {
-              return value.toLocaleString('en-GB', this.dateOptions);
-            },
-            getTime: function (value) {
+          formatDate: function (value) {
+            try {
+            return value.toLocaleString('en-GB', this.dateOptions);
+          }
+            catch(err) {
+              return '';
+            }
+          },
+          getTime: function (value) {
+            try {
               let time = value.toLocaleTimeString([], {
                 hour: 'numeric',
                 minute: '2-digit',
@@ -242,26 +258,30 @@ async function getEntries(req, res) {
                 time = '12' + time.slice(1);
               }
               return time.replace(' ', '');
-            },
-            sortDate: function () {
-              return (a, b) => {
-                return a.dateStartEnd.from - b.dateStartEnd.from;
+            } catch (err) {
+              return '';
+            }
+          },
+          createDates: function (arr) {
+            return arr.map((e) => {
+              return {
+                ...e,
+                dateStartEnd: {
+                  to: new Date(e.dateStartEnd.to),
+                  from: new Date(e.dateStartEnd.from),
+                },
               };
-            },
-      createDates: function (arr) {
-        return arr.map((e) => {
-          return {
-            ...e,
-            dateStartEnd: {
-              to: new Date(e.dateStartEnd.to),
-              from: new Date(e.dateStartEnd.from),
-            },
-          };
-        });
-      },
+            });
+          },
           },
           mounted() {
             this.copyItems = this.createDates(this.copyItems);
+            console.log(this.items);
+        if (this.item.dateStartEnd) {
+          this.item.dateStartEnd.to = new Date(this.item.dateStartEnd.to);
+          this.item.dateStartEnd.from = new Date(this.item.dateStartEnd.from);
+          console.log(this.item);
+        }
             this.filteredItems = this.copyItems.slice();
             this.searchedItems = this.copyItems.slice();
             this.calculatePages();
@@ -294,13 +314,6 @@ async function getEntries(req, res) {
       </div>
     </header>
     <div class="container mt-3">
-      <h1>${title}</h1>
-      <div class="d-none">
-        <p class="mb-0">Node Id: ${nodeId ? nodeId : 'Not found'}</p>
-        <p>Entry Id: ${entryId ? entryId : 'Not found.'}</p>
-        <p>Content Type: ${contentType ? contentType : 'Not found'}</p>
-        <hr />
-      </div>
       <div id="app" class="mt-3">${html}</div>
     </div>
     <footer>
@@ -336,12 +349,10 @@ server.use(myLogger);
 
 // Custom route handler for serving JavaScript and CSS files
 server.get(/.*\.(js|css)$/, (req, res) => {
-  console.log("Script request")
   const filePath = path.join(dir, req.url);
-      res.sendFile(filePath);
+  res.sendFile(filePath);
 });
 
 server.get(/^(?!.*\.js|.*\.css)/, (req, res) => {
   getEntries(req, res);
 });
-
