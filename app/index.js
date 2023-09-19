@@ -149,9 +149,9 @@ async function getEntries(req, res) {
             ],
           }),
           methods: {
-            cardLink: function(item) {
-              return "/rangerevents/" + item.sys.slug;
-            },
+      cardLink: function(item) {
+        return "/rangerevents/" + item.sys.slug.slice(0,-5);
+      },
             clearAlert: function () {
               this.searchAlert = false;
             },

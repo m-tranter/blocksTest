@@ -57,7 +57,7 @@ export function createApp(items, type, title, item) {
         this.searchAlert = false;
       },
       cardLink: function(item) {
-        return "/rangerevents/" + item.sys.slug;
+        return "/rangerevents/" + item.sys.slug.slice(0,-5);
       },
       prefix: function (str) {
         return 'https://www.cheshireeast.gov.uk' + str;
