@@ -71,12 +71,12 @@ async function getEntries(req, res) {
     const data = await response.json();
     items = data.items;
   }
-    ({ btns, pages } = makePages([...items]));
-    itemsStr = JSON.stringify(items);
-    itemStr = JSON.stringify(item);
-    pagesStr = JSON.stringify(pages);
-    btnStr = JSON.stringify(btns);
-    app = createApp(items, type, title, item, pages, btns, pageSize);
+  ({ btns, pages } = makePages([...items]));
+  itemsStr = JSON.stringify(items);
+  itemStr = JSON.stringify(item);
+  pagesStr = JSON.stringify(pages);
+  btnStr = JSON.stringify(btns);
+  app = createApp(items, type, title, item, pages, btns, pageSize);
   renderToString(app).then((html) => {
     res.send(`
 <!DOCTYPE html>
@@ -203,19 +203,15 @@ async function getEntries(req, res) {
               );
               this.calculatePages();
             },
-            filterByCategories: function () {
-              this.filteredItems = [];
-              if (this.categoriesChecked.length === 0) {
-                this.filteredItems = this.copyItems.slice();
-              } else {
-                this.filteredItems = this.copyItems.filter((elem) =>
-                  elem[this.filterField]
-                  .map((a) => a.name)
-                  .some((cat) => this.categoriesChecked.includes(cat)),
-                );
-              }
-              this.searchFilter();
-            },
+      filterByCategories: function () {
+        if (this.categoriesChecked.length === 0) {
+          this.filteredItems = this.copyItems.slice();
+        } else {
+          this.filteredItems = this.copyItems.filter((elem) =>
+            this.categoriesChecked.every(c => elem[this.filterField].includes(c)));
+        }
+        this.searchFilter();
+      },
             resetSearch: function () {
               this.searchTerm = '';
               this.fromDate = '';
@@ -289,6 +285,7 @@ async function getEntries(req, res) {
           },
           },
           mounted() {
+            this.copyItems.forEach(elem => elem.tags = elem.tags.map(e => e.name));
             this.copyItems = this.createDates(this.copyItems);
             if (this.item.dateStartEnd) {
               this.item.dateStartEnd.to = new Date(this.item.dateStartEnd.to);

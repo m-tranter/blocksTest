@@ -88,15 +88,11 @@ export function createApp(items, type, title, item, pages, btns, pageSize) {
         this.calculatePages();
       },
       filterByCategories: function () {
-        this.filteredItems = [];
         if (this.categoriesChecked.length === 0) {
           this.filteredItems = this.copyItems.slice();
         } else {
           this.filteredItems = this.copyItems.filter((elem) =>
-            elem[this.filterField]
-              .map((a) => a.name)
-              .some((cat) => this.categoriesChecked.includes(cat))
-          );
+            this.categoriesChecked.every(c => elem[this.filterField].includes(c)));
         }
         this.searchFilter();
       },
@@ -177,6 +173,7 @@ export function createApp(items, type, title, item, pages, btns, pageSize) {
       },
     },
     mounted() {
+      this.copyItems.forEach(elem => elem.tags = elem.tags.map(e => e.name));
       this.copyItems = this.createDates(this.copyItems);
       if (this.item.dateStartEnd) {
         this.item.dateStartEnd.to = new Date(this.item.dateStartEnd.to);
