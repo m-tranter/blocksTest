@@ -19,19 +19,21 @@ async function getEntries(req, res) {
   const queries = req.url.split(/\?|&/);
   let entryId = queries.find((k) => k.startsWith('entryId'));
   entryId = entryId && entryId.slice(8);
+
   let title = 'Title';
   let description = 'Description';
   let contentType;
   let items = [];
-  let type;
+  let type = false;
   let item = {};
   let app;
   let btns = [];
+  let pages = [];
   let pageSize = 10;
-  let itemsStr;
-  let btnStr;
-  let itemStr;
-  let pagesStr;
+  let itemsStr = '';
+  let btnStr = '';
+  let itemStr = '';
+  let pagesStr = '';
 
   const makePages = (arr) => {
     let count = arr.length;
@@ -41,37 +43,42 @@ async function getEntries(req, res) {
     return { btns, pages };
   };
 
-  if (entryId) {
-    const resp = await fetch(
-      `${ROOT_URL}/api/delivery/projects/${PROJECT}/entries/${entryId}/?accessToken=QCpZfwnsgnQsyHHB3ID5isS43cZnthj6YoSPtemxFGtcH15I`,
+  if (!entryId) {
+    // Not an entry.
+    res.sendFile(path.join(dir, 'index.html'));
+    return;
+  }
+
+  const resp = await fetch(
+    `${ROOT_URL}/api/delivery/projects/${PROJECT}/entries/${entryId}/?accessToken=QCpZfwnsgnQsyHHB3ID5isS43cZnthj6YoSPtemxFGtcH15I`,
+    { method: 'get' }
+  );
+  const data = await resp.json();
+  title = data.title || title;
+  description = data.description || description;
+  contentType = data.contentTypeAPIName || '';
+  type = data.listingPage || false;
+  if (!type) {
+    item = data;
+  }
+
+  // It's a listing page.
+  if (contentType) {
+    const response = await fetch(
+      `${ROOT_URL}/api/delivery/projects/${PROJECT}/contenttypes/${contentType}/entries?accessToken=QCpZfwnsgnQsyHHB3ID5isS43cZnthj6YoSPtemxFGtcH15I`,
       { method: 'get' }
     );
-    const data = await resp.json();
-    title = data.title || title;
-    description = data.description || description;
-    contentType = data.contentTypeAPIName || '';
-    type = data.listingPage || false;
-    if (!type) {
-      item = data;
-    }
-
-    if (contentType) {
-      const response = await fetch(
-        `${ROOT_URL}/api/delivery/projects/${PROJECT}/contenttypes/${contentType}/entries?accessToken=QCpZfwnsgnQsyHHB3ID5isS43cZnthj6YoSPtemxFGtcH15I`,
-        { method: 'get' }
-      );
-      const data = await response.json();
-      items = data.items;
-      let { btns, pages } = makePages([...items]);
-      app = createApp(items, type, title, item, pages, btns, pageSize);
-      itemsStr = JSON.stringify(items);
-      itemStr = JSON.stringify(item);
-      pagesStr = JSON.stringify(pages);
-      btnStr = JSON.stringify(btns);
-    }
-
-    renderToString(app).then((html) => {
-      res.send(`
+    const data = await response.json();
+    items = data.items;
+  }
+    ({ btns, pages } = makePages([...items]));
+    itemsStr = JSON.stringify(items);
+    itemStr = JSON.stringify(item);
+    pagesStr = JSON.stringify(pages);
+    btnStr = JSON.stringify(btns);
+    app = createApp(items, type, title, item, pages, btns, pageSize);
+  renderToString(app).then((html) => {
+    res.send(`
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -331,11 +338,7 @@ async function getEntries(req, res) {
   </body>
 </html>
       `);
-    });
-  } else {
-    res.sendFile(path.join(dir, 'index.html'));
-  }
-  
+  });
 }
 
 server.listen(port, (error) => {
