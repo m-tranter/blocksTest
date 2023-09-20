@@ -25,20 +25,34 @@ async function getEntries(req, res) {
   let items = [];
   let type;
   let item = {};
+  let app;
+  let btns = [];
+  let pageSize = 10;
+  let itemsStr;
+  let btnStr;
+  let itemStr;
+  let pagesStr;
+
+  const makePages = (arr) => {
+    let count = arr.length;
+    let pageCount = Math.ceil(count / pageSize);
+    let btns = Array.from({ length: pageCount }, (_, i) => i + 1);
+    let pages = [...Array(pageCount)].map(() => arr.splice(0, pageSize));
+    return { btns, pages };
+  };
 
   if (entryId) {
-    const res = await fetch(
+    const resp = await fetch(
       `${ROOT_URL}/api/delivery/projects/${PROJECT}/entries/${entryId}/?accessToken=QCpZfwnsgnQsyHHB3ID5isS43cZnthj6YoSPtemxFGtcH15I`,
       { method: 'get' }
     );
-    const data = await res.json();
+    const data = await resp.json();
     title = data.title || title;
     description = data.description || description;
     contentType = data.contentTypeAPIName || '';
     type = data.listingPage || false;
     if (!type) {
       item = data;
-      console.log(item);
     }
 
     if (contentType) {
@@ -48,15 +62,16 @@ async function getEntries(req, res) {
       );
       const data = await response.json();
       items = data.items;
+      let { btns, pages } = makePages([...items]);
+      app = createApp(items, type, title, item, pages, btns, pageSize);
+      itemsStr = JSON.stringify(items);
+      itemStr = JSON.stringify(item);
+      pagesStr = JSON.stringify(pages);
+      btnStr = JSON.stringify(btns);
     }
-  }
 
-  const app = createApp(items, type, title, item);
-  const itemsStr = JSON.stringify(items);
-  const itemStr = JSON.stringify(item);
-
-  renderToString(app).then((html) => {
-    res.send(`
+    renderToString(app).then((html) => {
+      res.send(`
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -91,7 +106,7 @@ async function getEntries(req, res) {
     <script type="importmap">
       {
         "imports": {
-          "vue": "https://unpkg.com/vue@3/dist/vue.esm-browser.js"
+          "vue": "https://unpkg.com/vue@3/dist/vue.esm-browser.prod.js"
         }
       }
     </script>
@@ -102,9 +117,8 @@ async function getEntries(req, res) {
             data: () => ({
             item: ${itemStr},
             type: ${type},
-              h1: "${title}",
-            items: [],
-            pages: [],
+            h1: "${title}",
+            pages: ${pagesStr},
             copyItems: ${itemsStr},
             categoriesChecked: [],
             rxDate: /^\d{4}-\d{2}-\d{2}(?:T\d{2}:\d{2}:\d{2})?(?:\.\d*)?Z?$/,
@@ -115,10 +129,10 @@ async function getEntries(req, res) {
               day: 'numeric',
             },
             pageIndex: 0,
-            totalCount: 0,
-            pageSize: 10,
-            pageCount: 0,
-            pageBtns: [],
+            totalCount: ${items.length},
+            pageSize: ${pageSize},
+            pageCount: ${btns.length},
+            pageBtns: ${btnStr},
             searchFields: ['title', 'description'],
             searchAlert: false,
             searchTerm: '',
@@ -149,9 +163,8 @@ async function getEntries(req, res) {
             ],
           }),
           methods: {
-      cardLink: function(item) {
-        return "/rangerevents/" + item.sys.slug.slice(0,-5);
-      },
+            cardLink: function(item) { return "/rangerevents/" + item.sys.slug.slice(0,-5);
+            },
             clearAlert: function () {
               this.searchAlert = false;
             },
@@ -167,9 +180,6 @@ async function getEntries(req, res) {
               );
             },
             searchFilter: function () {
-              console.log("In search filter");
-              console.log(this.filteredItems);
-              console.log(this.searchedItems);
               let fromDate = this.fromDate.length > 0 ? new Date(this.fromDate) : false;
               let toDate = this.toDate.length > 0 ? new Date(this.toDate) : false;
               this.searchedItems = this.filteredItems.filter((item) =>
@@ -187,7 +197,6 @@ async function getEntries(req, res) {
               this.calculatePages();
             },
             filterByCategories: function () {
-              console.log("In filter");
               this.filteredItems = [];
               if (this.categoriesChecked.length === 0) {
                 this.filteredItems = this.copyItems.slice();
@@ -220,14 +229,12 @@ async function getEntries(req, res) {
                 ...Array(Math.ceil(this.searchedItems.length / this.pageSize)),
               ].map(() => this.searchedItems.splice(0, this.pageSize));
             },
-            goToPage: function (pageNum) {
+            goToPage: function (i) {
               document.getElementById('contentTypesContainer').scrollIntoView();
-              this.items = this.pages[pageNum - 1];
-              this.pageIndex = pageNum - 1;
+              this.pageIndex = i;
               this.lastSearch = this.searchTerm;
             },
             applyFilters: function (cat) {
-              console.log(cat);
               const index = this.categoriesChecked.indexOf(cat);
               if (index > -1) {
                 this.categoriesChecked.splice(index, 1);
@@ -276,12 +283,10 @@ async function getEntries(req, res) {
           },
           mounted() {
             this.copyItems = this.createDates(this.copyItems);
-            console.log(this.items);
-        if (this.item.dateStartEnd) {
-          this.item.dateStartEnd.to = new Date(this.item.dateStartEnd.to);
-          this.item.dateStartEnd.from = new Date(this.item.dateStartEnd.from);
-          console.log(this.item);
-        }
+            if (this.item.dateStartEnd) {
+              this.item.dateStartEnd.to = new Date(this.item.dateStartEnd.to);
+              this.item.dateStartEnd.from = new Date(this.item.dateStartEnd.from);
+            }
             this.filteredItems = this.copyItems.slice();
             this.searchedItems = this.copyItems.slice();
             this.calculatePages();
@@ -326,7 +331,8 @@ async function getEntries(req, res) {
   </body>
 </html>
       `);
-  });
+    });
+  }
 }
 
 server.listen(port, (error) => {

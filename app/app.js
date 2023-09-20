@@ -1,14 +1,13 @@
 import { createSSRApp } from 'vue';
 import template from './template.js';
 
-export function createApp(items, type, title, item) {
+export function createApp(items, type, title, item, pages, btns, pageSize) {
   return createSSRApp({
     data: () => ({
       item: item,
       type: type,
       h1: title,
-      pages: [],
-      items: [],
+      pages: pages,
       copyItems: items,
       categoriesChecked: [],
       rxDate: /^\d{4}-\d{2}-\d{2}(?:T\d{2}:\d{2}:\d{2})?(?:\.\d*)?Z?$/,
@@ -19,10 +18,10 @@ export function createApp(items, type, title, item) {
         day: 'numeric',
       },
       pageIndex: 0,
-      totalCount: 0,
-      pageSize: 10,
-      pageCount: 0,
-      pageBtns: [],
+      totalCount: items.length,
+      pageSize: pageSize,
+      pageCount: btns.length,
+      pageBtns: btns,
       searchFields: ['title', 'description'],
       searchAlert: false,
       searchTerm: '',
@@ -56,8 +55,8 @@ export function createApp(items, type, title, item) {
       clearAlert: function () {
         this.searchAlert = false;
       },
-      cardLink: function(item) {
-        return "/rangerevents/" + item.sys.slug.slice(0,-5);
+      cardLink: function (item) {
+        return '/rangerevents/' + item.sys.slug.slice(0, -5);
       },
       prefix: function (str) {
         return 'https://www.cheshireeast.gov.uk' + str;
@@ -121,10 +120,9 @@ export function createApp(items, type, title, item) {
           ...Array(Math.ceil(this.searchedItems.length / this.pageSize)),
         ].map(() => this.searchedItems.splice(0, this.pageSize));
       },
-      goToPage: function (pageNum) {
+      goToPage: function (i) {
         document.getElementById('contentTypesContainer').scrollIntoView();
-        this.items = this.pages[pageNum - 1];
-        this.pageIndex = pageNum - 1;
+        this.pageIndex = i;
         this.lastSearch = this.searchTerm;
       },
       applyFilters: function (cat) {
@@ -138,10 +136,9 @@ export function createApp(items, type, title, item) {
         this.searchFilter();
       },
       formatDate: function (value) {
-        try { 
-        return value.toLocaleString('en-GB', this.dateOptions);
-      }
-        catch(err) {
+        try {
+          return value.toLocaleString('en-GB', this.dateOptions);
+        } catch (err) {
           return '';
         }
       },
@@ -184,7 +181,6 @@ export function createApp(items, type, title, item) {
       if (this.item.dateStartEnd) {
         this.item.dateStartEnd.to = new Date(this.item.dateStartEnd.to);
         this.item.dateStartEnd.from = new Date(this.item.dateStartEnd.from);
-        console.log(this.item);
       }
       this.filteredItems = this.copyItems.slice();
       this.searchedItems = this.copyItems.slice();
