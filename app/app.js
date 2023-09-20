@@ -92,7 +92,10 @@ export function createApp(items, type, title, item, pages, btns, pageSize) {
           this.filteredItems = this.copyItems.slice();
         } else {
           this.filteredItems = this.copyItems.filter((elem) =>
-            this.categoriesChecked.every(c => elem[this.filterField].includes(c)));
+            this.categoriesChecked.every((c) =>
+              elem[this.filterField].includes(c)
+            )
+          );
         }
         this.searchFilter();
       },
@@ -110,6 +113,7 @@ export function createApp(items, type, title, item, pages, btns, pageSize) {
         this.pageBtns = Array.from({ length: this.pageCount }, (_, i) => i + 1);
         this.createPages();
         this.items = this.pages[0];
+        document.getElementById('contentTypesContainer').scrollIntoView();
       },
       createPages: function () {
         this.pages = [
@@ -173,7 +177,9 @@ export function createApp(items, type, title, item, pages, btns, pageSize) {
       },
     },
     mounted() {
-      this.copyItems.forEach(elem => elem.tags = elem.tags.map(e => e.name));
+      this.copyItems.forEach(
+        (elem) => (elem.tags = elem.tags.map((e) => e.name))
+      );
       this.copyItems = this.createDates(this.copyItems);
       if (this.item.dateStartEnd) {
         this.item.dateStartEnd.to = new Date(this.item.dateStartEnd.to);

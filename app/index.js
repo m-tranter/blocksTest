@@ -203,15 +203,15 @@ async function getEntries(req, res) {
               );
               this.calculatePages();
             },
-      filterByCategories: function () {
-        if (this.categoriesChecked.length === 0) {
-          this.filteredItems = this.copyItems.slice();
-        } else {
-          this.filteredItems = this.copyItems.filter((elem) =>
-            this.categoriesChecked.every(c => elem[this.filterField].includes(c)));
-        }
-        this.searchFilter();
-      },
+            filterByCategories: function () {
+              if (this.categoriesChecked.length === 0) {
+                this.filteredItems = this.copyItems.slice();
+              } else {
+                this.filteredItems = this.copyItems.filter((elem) =>
+                  this.categoriesChecked.every(c => elem[this.filterField].includes(c)));
+              }
+              this.searchFilter();
+            },
             resetSearch: function () {
               this.searchTerm = '';
               this.fromDate = '';
@@ -226,8 +226,9 @@ async function getEntries(req, res) {
               this.pageBtns = Array.from({ length: this.pageCount }, (_, i) => i + 1);
               this.createPages();
               this.items = this.pages[0];
-            },
-            createPages: function () {
+              document.getElementById('contentTypesContainer').scrollIntoView();
+              },
+              createPages: function () {
               this.pages = [
                 ...Array(Math.ceil(this.searchedItems.length / this.pageSize)),
               ].map(() => this.searchedItems.splice(0, this.pageSize));
