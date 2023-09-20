@@ -332,7 +332,10 @@ async function getEntries(req, res) {
 </html>
       `);
     });
+  } else {
+    res.sendFile(path.join(dir, 'index.html'));
   }
+  
 }
 
 server.listen(port, (error) => {
