@@ -78,7 +78,7 @@ async function getEntries(req, res) {
   btnStr = JSON.stringify(btns);
   app = createApp(items, type, title, item, pages, btns, pageSize);
   renderToString(app).then((html) => {
-    res.send(`
+    res.end(`
 <!DOCTYPE html>
 <html lang="en">
   <head>
