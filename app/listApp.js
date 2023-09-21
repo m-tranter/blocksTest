@@ -135,7 +135,7 @@ export function createListApp(items, title, pages, btns, pageSize) {
           hour12: true,
         });
         if (time === '0:00 pm') {
-          return '12 noon';
+          return ' 12 noon';
         } else if (time.startsWith('0')) {
           time = '12' + time.slice(1);
         }
