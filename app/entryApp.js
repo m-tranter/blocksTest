@@ -38,7 +38,7 @@ export function createEntryApp(item) {
         } else if (time.startsWith('0')) {
           time = '12' + time.slice(1);
         }
-        return ' ' + time.replace(' ', '');
+        return ' ' + time.replace(' ', '').toLowerCase();
       },
     },
     template: entryTemplate,

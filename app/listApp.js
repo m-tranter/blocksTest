@@ -139,7 +139,7 @@ export function createListApp(items, title, pages, btns, pageSize) {
         } else if (time.startsWith('0')) {
           time = '12' + time.slice(1);
         }
-        return ' ' + time.replace(' ', '');
+        return ' ' + time.replace(' ', '').toLowerCase();
       },
       click_me: function (id) {
         document.getElementById(id).click();
