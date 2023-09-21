@@ -78,7 +78,7 @@ async function getEntries(req, res) {
   btnStr = JSON.stringify(btns);
   app = createApp(items, type, title, item, pages, btns, pageSize);
   renderToString(app).then((html) => {
-    res.end(`
+    res.send(`
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -357,12 +357,12 @@ const myLogger = function (req, _, next) {
 server.use(express.json());
 server.use(myLogger);
 
-server.get('/*', (req, res) => {
-  if (req.query.nodeId) {
-    getEntries(req, res);
-  } else {
+// Custom route handler for serving JavaScript and CSS files
+server.get(/.*\.(js|css)$/, (req, res) => {
   const filePath = path.join(dir, req.url);
   res.sendFile(filePath);
-  }
 });
 
+server.get('*', (req, res) => {
+  getEntries(req, res);
+});
