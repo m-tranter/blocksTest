@@ -357,12 +357,11 @@ server.use(express.json());
 server.use(myLogger);
 
 
-server.get('/:query', (req, res) => {
+server.get('/:nodeId', (req, res) => {
   getEntries(req, res);
 });
 
 server.all('*', (req, res) => {
-  console.log(req.url);
   const filePath = path.join(dir, req.url);
   res.sendFile(filePath);
 });
