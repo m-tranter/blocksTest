@@ -136,15 +136,10 @@ export function createApp(items, type, title, item, pages, btns, pageSize) {
         this.searchFilter();
       },
       formatDate: function (value) {
-        try {
-          return value.toLocaleString('en-GB', this.dateOptions);
-        } catch (err) {
-          return '';
-        }
+          return new Date(value).toLocaleString('en-GB', this.dateOptions);
       },
       getTime: function (value) {
-        try {
-          let time = value.toLocaleTimeString([], {
+          let time = new Date(value).toLocaleTimeString([], {
             hour: 'numeric',
             minute: '2-digit',
             hour12: true,
@@ -155,25 +150,6 @@ export function createApp(items, type, title, item, pages, btns, pageSize) {
             time = '12' + time.slice(1);
           }
           return time.replace(' ', '');
-        } catch (err) {
-          return '';
-        }
-      },
-      sortDate: function () {
-        return (a, b) => {
-          return a.dateStartEnd.from - b.dateStartEnd.from;
-        };
-      },
-      createDates: function (arr) {
-        return arr.map((e) => {
-          return {
-            ...e,
-            dateStartEnd: {
-              to: new Date(e.dateStartEnd.to),
-              from: new Date(e.dateStartEnd.from),
-            },
-          };
-        });
       },
     },
     mounted() {
@@ -181,10 +157,6 @@ export function createApp(items, type, title, item, pages, btns, pageSize) {
         (elem) => (elem.tags = elem.tags.map((e) => e.name))
       );
       this.copyItems = this.createDates(this.copyItems);
-      if (this.item.dateStartEnd) {
-        this.item.dateStartEnd.to = new Date(this.item.dateStartEnd.to);
-        this.item.dateStartEnd.from = new Date(this.item.dateStartEnd.from);
-      }
       this.filteredItems = this.copyItems.slice();
       this.searchedItems = this.copyItems.slice();
       this.calculatePages();

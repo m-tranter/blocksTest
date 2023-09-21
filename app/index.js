@@ -108,7 +108,6 @@ async function getEntries(req, res) {
       rel="stylesheet"
     />
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
-      <script src="/static/myscript.js"></script>
     <title>${title}</title>
     <script type="importmap">
       {
@@ -248,50 +247,25 @@ async function getEntries(req, res) {
               this.filterByCategories();
               this.searchFilter();
             },
-          formatDate: function (value) {
-            try {
-            return value.toLocaleString('en-GB', this.dateOptions);
+      formatDate: function (value) {
+          return new Date(value).toLocaleString('en-GB', this.dateOptions);
+      },
+      getTime: function (value) {
+          let time = new Date(value).toLocaleTimeString([], {
+            hour: 'numeric',
+            minute: '2-digit',
+            hour12: true,
+          });
+          if (time === '0:00 pm') {
+            return '12 noon';
+          } else if (time.startsWith('0')) {
+            time = '12' + time.slice(1);
           }
-            catch(err) {
-              return '';
-            }
-          },
-          getTime: function (value) {
-            try {
-              let time = value.toLocaleTimeString([], {
-                hour: 'numeric',
-                minute: '2-digit',
-                hour12: true,
-              });
-              if (time === '0:00 pm') {
-                return '12 noon';
-              } else if (time.startsWith('0')) {
-                time = '12' + time.slice(1);
-              }
-              return time.replace(' ', '');
-            } catch (err) {
-              return '';
-            }
-          },
-          createDates: function (arr) {
-            return arr.map((e) => {
-              return {
-                ...e,
-                dateStartEnd: {
-                  to: new Date(e.dateStartEnd.to),
-                  from: new Date(e.dateStartEnd.from),
-                },
-              };
-            });
-          },
+          return time.replace(' ', '');
+      },
           },
           mounted() {
             this.copyItems.forEach(elem => elem.tags = elem.tags.map(e => e.name));
-            this.copyItems = this.createDates(this.copyItems);
-            if (this.item.dateStartEnd) {
-              this.item.dateStartEnd.to = new Date(this.item.dateStartEnd.to);
-              this.item.dateStartEnd.from = new Date(this.item.dateStartEnd.from);
-            }
             this.filteredItems = this.copyItems.slice();
             this.searchedItems = this.copyItems.slice();
             this.calculatePages();
