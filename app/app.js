@@ -136,20 +136,23 @@ export function createApp(items, type, title, item, pages, btns, pageSize) {
         this.searchFilter();
       },
       formatDate: function (value) {
-          return new Date(value).toLocaleString('en-GB', this.dateOptions);
+        return new Date(value).toLocaleString('en-GB', this.dateOptions);
       },
       getTime: function (value) {
-          let time = new Date(value).toLocaleTimeString([], {
-            hour: 'numeric',
-            minute: '2-digit',
-            hour12: true,
-          });
-          if (time === '0:00 pm') {
-            return '12 noon';
-          } else if (time.startsWith('0')) {
-            time = '12' + time.slice(1);
-          }
-          return time.replace(' ', '');
+        let time = new Date(value).toLocaleTimeString([], {
+          hour: 'numeric',
+          minute: '2-digit',
+          hour12: true,
+        });
+        if (time === '0:00 pm') {
+          return '12 noon';
+        } else if (time.startsWith('0')) {
+          time = '12' + time.slice(1);
+        }
+        return time.replace(' ', '');
+      },
+      click_me:function(id) {
+        document.getElementById(id).click();
       },
     },
     mounted() {
