@@ -357,12 +357,12 @@ const myLogger = function (req, _, next) {
 server.use(express.json());
 server.use(myLogger);
 
-// Custom route handler for serving JavaScript and CSS files
-server.get(/.*\.(js|css)$/, (req, res) => {
-  const filePath = path.join(dir, req.url);
-  res.sendFile(filePath);
+
+server.get('/:query', (req, res) => {
+  getEntries(req, res);
 });
 
-server.get(/^(?!.*\.js|.*\.css)/, (req, res) => {
-  getEntries(req, res);
+server.all('*', (req, res) => {
+  const filePath = path.join(dir, req.url);
+  res.sendFile(filePath);
 });
