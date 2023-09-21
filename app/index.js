@@ -362,6 +362,7 @@ server.get('/:query', (req, res) => {
 });
 
 server.all('*', (req, res) => {
+  console.log(req.url);
   const filePath = path.join(dir, req.url);
   res.sendFile(filePath);
 });
