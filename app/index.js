@@ -44,6 +44,7 @@ async function getEntries(req, res) {
   };
 
   if (!entryId) {
+    // Not an entry.
     res.sendFile(path.join(dir, 'index.html'));
     return;
   }
@@ -356,12 +357,14 @@ const myLogger = function (req, _, next) {
 server.use(express.json());
 server.use(myLogger);
 
+server.get('*', (req, res) => {
 
-server.get('/:nodeId', (req, res) => {
-  getEntries(req, res);
-});
-
-server.all('*', (req, res) => {
+  if (req.query.nodeId) {
+    getEntries(req, res);
+  } else {
   const filePath = path.join(dir, req.url);
   res.sendFile(filePath);
+  }
+
 });
+
