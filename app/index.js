@@ -44,7 +44,6 @@ async function getEntries(req, res) {
   };
 
   if (!entryId) {
-    // Not an entry.
     res.sendFile(path.join(dir, 'index.html'));
     return;
   }
