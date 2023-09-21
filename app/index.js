@@ -248,7 +248,7 @@ async function getEntries(req, res) {
               this.searchFilter();
             },
             formatDate: function (value) {
-              return new Date(value).toLocaleString('en-GB', this.dateOptions);
+              return ' ' + new Date(value).toLocaleString('en-GB', this.dateOptions);
             },
             getTime: function (value) {
               let time = new Date(value).toLocaleTimeString([], {
@@ -261,7 +261,7 @@ async function getEntries(req, res) {
               } else if (time.startsWith('0')) {
                 time = '12' + time.slice(1);
               }
-              return time.replace(' ', '');
+              return ' ' + time.replace(' ', '');
             },
             click_me:function(id) {
               document.getElementById(id).click();
