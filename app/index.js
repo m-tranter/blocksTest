@@ -2,11 +2,13 @@
 
 import express from 'express';
 import { renderToString } from 'vue/server-renderer';
-import { createApp } from './app.js';
+import { createListApp } from './listApp.js';
+import { createEntryApp } from './entryApp.js';
 import fetch from 'node-fetch';
 import path from 'path';
 import { fileURLToPath } from 'url';
-import template from './template.js';
+import listTemplate from './listTemplate.js';
+import entryTemplate from './entryTemplate.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const dir = path.join(__dirname, '../public');
@@ -14,27 +16,10 @@ const server = express();
 const port = 3001;
 const ROOT_URL = `https://cms-chesheast.cloud.contensis.com/`;
 const PROJECT = 'website';
+const pageSize = 10;
 
 async function getEntries(req, res) {
-  const queries = req.url.split(/\?|&/);
-  let entryId = queries.find((k) => k.startsWith('entryId'));
-  entryId = entryId && entryId.slice(8);
-
-  let title = 'Title';
-  let description = 'Description';
-  let contentType;
-  let items = [];
-  let type = false;
-  let item = {};
-  let app;
-  let btns = [];
-  let pages = [];
-  let pageSize = 10;
-  let itemsStr = '';
-  let btnStr = '';
-  let itemStr = '';
-  let pagesStr = '';
-
+  // Needed to set up pages server-side.
   const makePages = (arr) => {
     let count = arr.length;
     let pageCount = Math.ceil(count / pageSize);
@@ -43,42 +28,40 @@ async function getEntries(req, res) {
     return { btns, pages };
   };
 
+  // Find query string.
+  const queries = req.url.split(/\?|&/);
+  let entryId = queries.find((k) => k.startsWith('entryId'));
+  entryId = entryId && entryId.slice(8);
+
+  // No entry id in query string.
   if (!entryId) {
-    // Not an entry.
     res.sendFile(path.join(dir, 'index.html'));
     return;
   }
 
+  // Try to get an entry.
   const resp = await fetch(
     `${ROOT_URL}/api/delivery/projects/${PROJECT}/entries/${entryId}/?accessToken=QCpZfwnsgnQsyHHB3ID5isS43cZnthj6YoSPtemxFGtcH15I`,
     { method: 'get' }
   );
-  const data = await resp.json();
-  title = data.title || title;
-  description = data.description || description;
-  contentType = data.contentTypeAPIName || '';
-  type = data.listingPage || false;
-  if (!type) {
-    item = data;
+
+  // Failed to get an entry.
+  if (resp.status !== 200) {
+    res.sendFile(path.join(dir, 'index.html'));
+    return;
   }
 
-  // It's a listing page.
-  if (contentType) {
-    const response = await fetch(
-      `${ROOT_URL}/api/delivery/projects/${PROJECT}/contenttypes/${contentType}/entries?accessToken=QCpZfwnsgnQsyHHB3ID5isS43cZnthj6YoSPtemxFGtcH15I`,
-      { method: 'get' }
-    );
-    const data = await response.json();
-    items = data.items;
-  }
-  ({ btns, pages } = makePages([...items]));
-  itemsStr = JSON.stringify(items);
-  itemStr = JSON.stringify(item);
-  pagesStr = JSON.stringify(pages);
-  btnStr = JSON.stringify(btns);
-  app = createApp(items, type, title, item, pages, btns, pageSize);
-  renderToString(app).then((html) => {
-    res.send(`
+  const item = await resp.json();
+  const title = item.title || '';
+  const description = item.description || '';
+  const contentType = item.contentTypeAPIName || '';
+
+  // Not a listing page - just send the selected item app & template.
+  if (!contentType) {
+    const entryApp = createEntryApp(item);
+    const itemStr = JSON.stringify(item);
+    renderToString(entryApp).then((html) => {
+      res.send(`
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -96,7 +79,6 @@ async function getEntries(req, res) {
       rel="stylesheet"
       type="text/css"
     />
-
     <link
       href="https://www.cheshireeast.gov.uk/SiteElements/css/bs5/600-events-vue-axios.css"
 "
@@ -122,7 +104,141 @@ async function getEntries(req, res) {
           return createSSRApp({
             data: () => ({
             item: ${itemStr},
-            type: ${type},
+            dateOptions: {
+              weekday: 'long',
+              year: 'numeric',
+              month: 'long',
+              day: 'numeric',
+            },
+          }),
+          methods: {
+            prefix: function(str) {
+              return "https://www.cheshireeast.gov.uk" + str;
+            },
+            gmap: function (item) {
+              return (
+                'https://maps.google.com/maps?q=' +
+                item.mapLocation.lat +
+                ',' +
+                item.mapLocation.lon
+              );
+            },
+            formatDate: function (value) {
+              return ' ' + new Date(value).toLocaleString('en-GB', this.dateOptions);
+            },
+            getTime: function (value) {
+              let time = new Date(value).toLocaleTimeString([], {
+                hour: 'numeric',
+                minute: '2-digit',
+                hour12: true,
+              });
+              if (time === '0:00 pm') {
+                return '12 noon';
+              } else if (time.startsWith('0')) {
+                time = '12' + time.slice(1);
+              }
+              return ' ' + time.replace(' ', '');
+            },
+          },
+            template: '${entryTemplate}',
+          })
+        };
+      createApp().mount('#app');
+    </script>
+  </head>
+  <body>
+    <header class="cec-header">
+      <div class="container">
+        <a
+          class="navbar-brand border border-0 border-secondary"
+          title="Home"
+          href="https://www.cheshireeast.gov.uk/home.aspx"
+        >
+          <img
+            title="Home page"
+            alt="Cheshire East Council home page"
+            height="70"
+            width="155"
+            src="https://www.cheshireeast.gov.uk/images/non_user/cec-logo-colour-155x70px.png"
+          />
+          <span class="visually-hidden"
+            >Cheshire East Council website home page</span
+          ></a
+        >
+      </div>
+    </header>
+    <div class="container mt-3">
+      <div id="app" class="mt-3">${html}</div>
+    </div>
+    <footer>
+      <div class="container py-2">
+        <p class="mb-0 text-md-end text-white">
+          <strong>&copy; Cheshire East Council</strong>
+        </p>
+      </div>
+    </footer>
+  </body>
+</html>
+      `);
+    });
+    return;
+  }
+
+  // It's a listing page.
+  const response = await fetch(
+    `${ROOT_URL}/api/delivery/projects/${PROJECT}/contenttypes/${contentType}/entries?accessToken=QCpZfwnsgnQsyHHB3ID5isS43cZnthj6YoSPtemxFGtcH15I`,
+    { method: 'get' }
+  );
+  const data = await response.json();
+  const items = data.items;
+  const { btns, pages } = makePages([...items]);
+  const itemsStr = JSON.stringify(items);
+  const pagesStr = JSON.stringify(pages);
+  const btnStr = JSON.stringify(btns);
+  const app = createListApp(items, title, pages, btns, pageSize);
+  renderToString(app).then((html) => {
+    res.send(`
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="description" content="${description}" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD"
+      crossorigin="anonymous"
+    />
+    <link
+      href="https://www.cheshireeast.gov.uk/siteelements/css/bs5/400-cec-styles.css"
+      rel="stylesheet"
+      type="text/css"
+    />
+    <link
+      href="https://www.cheshireeast.gov.uk/SiteElements/css/bs5/600-events-vue-axios.css"
+"
+      rel="stylesheet"
+      type="text/css"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700"
+      rel="stylesheet"
+    />
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <title>${title}</title>
+    <script type="importmap">
+      {
+        "imports": {
+          "vue": "https://unpkg.com/vue@3/dist/vue.esm-browser.prod.js"
+        }
+      }
+    </script>
+    <script type="module">
+        import { createSSRApp } from 'vue';
+        function createApp(items) {
+          return createSSRApp({
+            data: () => ({
             h1: "${title}",
             pages: ${pagesStr},
             copyItems: ${itemsStr},
@@ -176,14 +292,6 @@ async function getEntries(req, res) {
             },
             prefix: function(str) {
               return "https://www.cheshireeast.gov.uk" + str;
-            },
-            gmap: function (item) {
-              return (
-                'https://maps.google.com/maps?q=' +
-                item.mapLocation.lat +
-                ',' +
-                item.mapLocation.lon
-              );
             },
             searchFilter: function () {
               let fromDate = this.fromDate.length > 0 ? new Date(this.fromDate) : false;
@@ -273,7 +381,7 @@ async function getEntries(req, res) {
             this.searchedItems = this.copyItems.slice();
             this.calculatePages();
           },
-            template: '${template}',
+            template: '${listTemplate}',
           })
         };
       createApp().mount('#app');
