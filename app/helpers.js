@@ -26,7 +26,7 @@ const formatDate = (d) => {
 };
 
 const formatTime = (t) => {
-  let time = new Date(t).toLocaleTimeString([], timeOptions);
+  let time = new Date(t).toLocaleTimeString('en-GB', timeOptions);
   if (time === '0:00 pm') {
     return ' 12 noon';
   } else if (time.startsWith('0')) {
