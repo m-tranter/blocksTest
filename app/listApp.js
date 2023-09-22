@@ -1,3 +1,4 @@
+'use strict';
 import listTemplate from './listTemplate.js';
 import { createSSRApp } from 'vue';
 
@@ -8,13 +9,6 @@ export function createListApp(items, title, pages, btns, pageSize) {
       pages: pages,
       copyItems: items,
       categoriesChecked: [],
-      rxDate: /^\d{4}-\d{2}-\d{2}(?:T\d{2}:\d{2}:\d{2})?(?:\.\d*)?Z?$/,
-      dateOptions: {
-        weekday: 'long',
-        year: 'numeric',
-        month: 'long',
-        day: 'numeric',
-      },
       pageIndex: 0,
       totalCount: items.length,
       pageSize: pageSize,
@@ -125,31 +119,16 @@ export function createListApp(items, title, pages, btns, pageSize) {
         this.filterByCategories();
         this.searchFilter();
       },
-      formatDate: function (value) {
-        return ' ' + new Date(value).toLocaleString('en-GB', this.dateOptions);
-      },
-      getTime: function (value) {
-        let time = new Date(value).toLocaleTimeString([], {
-          hour: 'numeric',
-          minute: '2-digit',
-          hour12: true,
-        });
-        if (time === '0:00 pm') {
-          return ' 12 noon';
-        } else if (time.startsWith('0')) {
-          time = '12' + time.slice(1);
-        }
-        return ' ' + time.replace(' ', '').toLowerCase();
-      },
       click_me: function (id) {
         document.getElementById(id).click();
       },
     },
     mounted() {
-      this.copyItems.forEach(
-        (elem) => (elem.tags = elem.tags.map((e) => e.name))
-      );
-      this.copyItems = this.createDates(this.copyItems);
+      this.copyItems = this.copyItems.map((e) => {
+        e.dateStartEnd.to = new Date(e.dateStartEnd.to);
+        e.dateStartEnd.from = new Date(e.dateStartEnd.from);
+        return e;
+      });
       this.filteredItems = this.copyItems.slice();
       this.searchedItems = this.copyItems.slice();
       this.calculatePages();
