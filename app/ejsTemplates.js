@@ -29,13 +29,7 @@ const top = `
       />
       <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
       <title><%= title%></title>
-      <script type="importmap">
-        {
-          "imports": {
-            "vue": "https://unpkg.com/vue@3/dist/vue.esm-browser.prod.js"
-          }
-        }
-      </script>`;
+  `;
 
 const bottom = `
   <body>
@@ -73,34 +67,17 @@ const bottom = `
 </html>`;
 
 const entryMiddle = `
-    <script type="module">
-        import { createSSRApp } from 'vue';
-        function createApp(items) {
-          return createSSRApp({
-            data: () => ({
-            item: <%- itemStr%>,
-          }),
-          methods: {
-            prefix: function(str) {
-              return "https://www.cheshireeast.gov.uk" + str;
-            },
-            gmap: function (item) {
-              return (
-                'https://maps.google.com/maps?q=' +
-                item.mapLocation.lat +
-                ',' +
-                item.mapLocation.lon
-              );
-            },
-          },
-            template: '<%- template%>',
-          })
-        };
-      createApp().mount('#app');
-    </script>
   </head>`;
 
 const listMiddle = `
+      <script type="importmap">
+        {
+          "imports": {
+            "vue": "https://unpkg.com/vue@3/dist/vue.esm-browser.prod.js"
+          }
+        }
+      </script>
+  </head>
     <script type="module">
       import { createSSRApp } from 'vue';
       function createApp(items) {
@@ -229,7 +206,7 @@ const listMiddle = `
           this.searchedItems = this.copyItems.slice();
           this.calculatePages();
         },
-          template: '<%- template %>',
+          template: \`<%- template %>\`,
         })
       };
     createApp().mount('#app');

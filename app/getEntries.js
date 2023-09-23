@@ -5,7 +5,6 @@ import fetch from 'node-fetch';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import listTemplate from './listTemplate.js';
-import entryTemplate from './entryTemplate.js';
 import { createListApp } from './listApp.js';
 import { createEntryApp } from './entryApp.js';
 import { changeTags, addDates, makePages } from './helpers.js';
@@ -53,14 +52,8 @@ async function getEntries(req, res) {
   if (!contentType) {
     item = changeTags(addDates(item));
     const entryApp = createEntryApp(item);
-    const itemStr = JSON.stringify(item);
     renderToString(entryApp).then((html) => {
-      res.send(`${topHtml}${ejs.render(entryMiddle, {
-        itemStr: itemStr,
-        template: entryTemplate,
-      })}
-      ${ejs.render(bottom, { html: html })}
-      `);
+      res.send(`${topHtml}</head>${ejs.render(bottom, { html: html })}`);
     });
     return;
   }
@@ -83,15 +76,16 @@ async function getEntries(req, res) {
   const { btns, pages } = makePages([...items], pageSize);
   const app = createListApp(items, title, pages, btns, pageSize);
   renderToString(app).then((html) => {
-    res.send(`${topHtml}${ejs.render(listMiddle, {
-      items: items,
-      title: title,
-      pages: pages,
-      btns: btns,
-      pageSize: pageSize,
-      template: listTemplate,
-    })}${ejs.render(bottom, { html: html })}
-      `);
+    res.send(
+      `${topHtml}${ejs.render(listMiddle, {
+        items: items,
+        title: title,
+        pages: pages,
+        btns: btns,
+        pageSize: pageSize,
+        template: listTemplate,
+      })}${ejs.render(bottom, { html: html })}`
+    );
   });
 }
 
