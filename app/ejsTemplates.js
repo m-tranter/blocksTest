@@ -66,9 +66,6 @@ const bottom = `
   </body>
 </html>`;
 
-const entryMiddle = `
-  </head>`;
-
 const listMiddle = `
       <script type="importmap">
         {
@@ -213,4 +210,4 @@ const listMiddle = `
     </script>
   </head>`;
 
-export { top, bottom, entryMiddle, listMiddle };
+export { top, bottom, listMiddle };

@@ -8,7 +8,7 @@ import listTemplate from './listTemplate.js';
 import { createListApp } from './listApp.js';
 import { createEntryApp } from './entryApp.js';
 import { changeTags, addDates, makePages } from './helpers.js';
-import { top, bottom, entryMiddle, listMiddle } from './ejsTemplates.js';
+import { top, bottom, listMiddle } from './ejsTemplates.js';
 import ejs from 'ejs';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
