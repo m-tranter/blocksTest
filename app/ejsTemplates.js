@@ -29,6 +29,7 @@ const top = `
       />
       <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
       <title><%= title%></title>
+    </head>
   `;
 
 const bottom = `
@@ -66,7 +67,7 @@ const bottom = `
   </body>
 </html>`;
 
-const listMiddle = `
+const middle = `
       <script type="importmap">
         {
           "imports": {
@@ -74,7 +75,6 @@ const listMiddle = `
           }
         }
       </script>
-  </head>
     <script type="module">
       import { createSSRApp } from 'vue';
       function createApp(items) {
@@ -142,6 +142,7 @@ const listMiddle = `
                 );
               }),
             );
+            this.searchedItems.sort(this.sortDate);
             this.calculatePages();
           },
           filterByCategories: function () {
@@ -210,4 +211,4 @@ const listMiddle = `
     </script>
   </head>`;
 
-export { top, bottom, listMiddle };
+export { top, bottom, middle };

@@ -7,8 +7,8 @@ import { fileURLToPath } from 'url';
 import listTemplate from './listTemplate.js';
 import { createListApp } from './listApp.js';
 import { createEntryApp } from './entryApp.js';
-import { changeTags, addDates, makePages } from './helpers.js';
-import { top, bottom, listMiddle } from './ejsTemplates.js';
+import { changeTags, addDates, makePages, sortDate } from './helpers.js';
+import { top, bottom, middle } from './ejsTemplates.js';
 import ejs from 'ejs';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -53,7 +53,7 @@ async function getEntries(req, res) {
     item = changeTags(addDates(item));
     const entryApp = createEntryApp(item);
     renderToString(entryApp).then((html) => {
-      res.send(`${topHtml}</head>${ejs.render(bottom, { html: html })}`);
+      res.send(`${topHtml}${ejs.render(bottom, { html: html })}`);
     });
     return;
   }
@@ -73,11 +73,12 @@ async function getEntries(req, res) {
   const data = await response.json();
   let items = data.items.map((e) => addDates(e));
   items = items.map((e) => changeTags(e));
+  items.sort(sortDate);
   const { btns, pages } = makePages([...items], pageSize);
   const app = createListApp(items, title, pages, btns, pageSize);
   renderToString(app).then((html) => {
     res.send(
-      `${topHtml}${ejs.render(listMiddle, {
+      `${topHtml}${ejs.render(middle, {
         items: items,
         title: title,
         pages: pages,

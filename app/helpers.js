@@ -22,11 +22,15 @@ const makePages = (arr, pageSize) => {
 };
 
 const formatDate = (d) => {
-  return new Date(d).toLocaleString('en-GB', dateOptions);
+  return d.toLocaleString('en-GB', dateOptions);
+};
+
+const sortDate = (a, b) => {
+  return a.dateStartEnd.from - b.dateStartEnd.from;
 };
 
 const formatTime = (t) => {
-  let time = new Date(t).toLocaleTimeString('en-GB', timeOptions);
+  let time = t.toLocaleTimeString('en-GB', timeOptions);
   if (time === '0:00 pm') {
     return ' 12 noon';
   } else if (time.startsWith('0')) {
@@ -36,6 +40,8 @@ const formatTime = (t) => {
 };
 
 const addDates = (obj) => {
+  obj.dateStartEnd.to = new Date(obj.dateStartEnd.to);
+  obj.dateStartEnd.from = new Date(obj.dateStartEnd.from);
   obj.startDate = formatDate(obj.dateStartEnd.from);
   obj.endDate = formatDate(obj.dateStartEnd.to);
   obj.startTime = formatTime(obj.dateStartEnd.from);
@@ -48,4 +54,4 @@ const changeTags = (obj) => {
   return obj;
 };
 
-export { changeTags, addDates, makePages };
+export { changeTags, addDates, makePages, sortDate };

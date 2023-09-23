@@ -69,6 +69,7 @@ export function createListApp(items, title, pages, btns, pageSize) {
             );
           })
         );
+        this.searchedItems.sort(this.sortDate);
         this.calculatePages();
       },
       filterByCategories: function () {
@@ -121,6 +122,9 @@ export function createListApp(items, title, pages, btns, pageSize) {
       },
       click_me: function (id) {
         document.getElementById(id).click();
+      },
+      sortDate: function (a, b) {
+        return a.dateStardEnd.from - b.dateStartEnd.from;
       },
     },
     mounted() {
