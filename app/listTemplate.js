@@ -65,7 +65,7 @@ const listTemplate = `
             ></a
           >
           <div
-            class="col-12 col-md-5 thumbnail-container d-flex justify-content-center px-2"
+            class="col-12 col-md-5 thumbnail-container d-flex justify-content-center pt-2 pt-md-0 px-2"
           >
             <img
               v-if="item.image !=null"
