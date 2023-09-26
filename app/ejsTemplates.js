@@ -50,8 +50,8 @@ BrowseAloud.disableBrowsealoudAnalytics();
 
 const bottom = `
   <body>
-    <header class="cec-header">
   <div id="__ba_panel"></div>
+    <header class="cec-header">
       <div class="container">
   <div class="row">
         <div class="col-auto">
