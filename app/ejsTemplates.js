@@ -351,9 +351,6 @@ const middle = `
           clearAlert: function () {
             this.searchAlert = false;
           },
-          prefix: function(str) {
-            return "" + str;
-          },
           searchFilter: function () {
             let fromDate = this.fromDate.length > 0 ? new Date(this.fromDate) : false;
             let toDate = this.toDate.length > 0 ? new Date(this.toDate) : false;
@@ -382,12 +379,16 @@ const middle = `
             this.searchFilter();
           },
           resetSearch: function () {
+            this.categoriesChecked = [];
+            this.categories.forEach(
+              (e) => (document.getElementById(e).checked = false)
+            );
             this.searchTerm = '';
             this.fromDate = '';
             this.toDate = '';
-            this.searchedItems = this.filteredItems.slice();
+            this.searchedItems = this.copyItems.slice();
             this.calculatePages();
-          },
+            },
           calculatePages: function () {
             this.totalCount = this.searchedItems.length;
             this.pageCount = Math.ceil(this.totalCount / this.pageSize);

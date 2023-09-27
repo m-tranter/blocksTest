@@ -50,9 +50,6 @@ export function createListApp(items, title, pages, btns, pageSize) {
       cardLink: function (item) {
         return '/rangerevents/' + item.sys.slug.slice(0, -5);
       },
-      prefix: function (str) {
-        return 'https://www.cheshireeast.gov.uk' + str;
-      },
       searchFilter: function () {
         let fromDate =
           this.fromDate.length > 0 ? new Date(this.fromDate) : false;
@@ -85,10 +82,14 @@ export function createListApp(items, title, pages, btns, pageSize) {
         this.searchFilter();
       },
       resetSearch: function () {
+        this.categoriesChecked = [];
+        this.categories.forEach(
+          (e) => (document.getElementById(e).checked = false)
+        );
         this.searchTerm = '';
         this.fromDate = '';
         this.toDate = '';
-        this.searchedItems = this.filteredItems.slice();
+        this.searchedItems = this.copyItems.slice();
         this.calculatePages();
       },
       calculatePages: function () {

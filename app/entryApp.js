@@ -9,11 +9,8 @@ export function createEntryApp(item) {
       item: item,
     }),
     methods: {
-      prefix: function (str) {
-        return 'https://www.cheshireeast.gov.uk' + str;
-      },
       gmap: function (item) {
-        return  `https://maps.google.com/maps?q=${item.mapLocation.lat},${item.mapLocation.lon}`;
+        return `https://maps.google.com/maps?q=${item.mapLocation.lat},${item.mapLocation.lon}`;
       },
     },
     template: entryTemplate,

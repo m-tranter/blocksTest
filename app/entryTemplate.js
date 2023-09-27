@@ -16,7 +16,7 @@ const entryTemplate = `
         <img
           v-if="item.image !=null"
           class="rounded mx-auto d-block featured-img"
-          v-bind:src="prefix(item.image.asset.sys.uri)"
+          v-bind:src="item.image.asset.sys.uri"
           v-bind:alt="item.title"
         />
         <hr />
