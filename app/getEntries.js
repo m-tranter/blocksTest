@@ -20,18 +20,22 @@ const pageSize = 10;
 async function getEntries(req, res) {
   const queries = req.url.split(/\?|&/);
   let entryId = queries.find((k) => k.startsWith('entryId'));
-
   // Abort if no entryID.
   if (!entryId) {
     res.sendFile(path.join(dir, 'index.html'));
     return;
+  } else {
+    entryId = entryId.slice(8);
+  }
+
+  // Hard-coding this so that the link on leaflets works.
+  if (entryId === '00000000-0000-0000-0000-000000000000') {
+    entryId = 'ddebbc4f-2d11-4bfa-81f9-6fb19919d7ac';
   }
 
   // Get the entry from the query string.
   const resp = await fetch(
-    `${ROOT_URL}/api/delivery/projects/${PROJECT}/entries/${entryId.slice(
-      8
-    )}/?accessToken=QCpZfwnsgnQsyHHB3ID5isS43cZnthj6YoSPtemxFGtcH15I`,
+    `${ROOT_URL}/api/delivery/projects/${PROJECT}/entries/${entryId}/?accessToken=QCpZfwnsgnQsyHHB3ID5isS43cZnthj6YoSPtemxFGtcH15I`,
     { method: 'get' }
   );
 
