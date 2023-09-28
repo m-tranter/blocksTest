@@ -1,4 +1,5 @@
 'use strict';
+
 import { createSSRApp } from 'vue';
 import entryTemplate from './entryTemplate.js';
 

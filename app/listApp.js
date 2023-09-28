@@ -6,6 +6,7 @@ export function createListApp(items, title, pages, btns, pageSize) {
   return createSSRApp({
     data: () => ({
       h1: title,
+      loaded: false,
       pages: pages,
       copyItems: items,
       categoriesChecked: [],
@@ -99,7 +100,11 @@ export function createListApp(items, title, pages, btns, pageSize) {
         this.pageBtns = Array.from({ length: this.pageCount }, (_, i) => i + 1);
         this.createPages();
         this.items = this.pages[0];
-        document.getElementById('contentTypesContainer').scrollIntoView();
+        if (this.loaded) {
+          document.getElementById('contentTypesContainer').scrollIntoView();
+        } else {
+          this.loaded = true;
+        }
       },
       createPages: function () {
         this.pages = [

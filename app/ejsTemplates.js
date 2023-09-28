@@ -681,6 +681,7 @@ const middle = `
         return createSSRApp({
           data: () => ({
           h1: "<%= title %>",
+          loaded: false,
           pages: <%- JSON.stringify(pages) %>,
           copyItems: <%- JSON.stringify(items) %>,
           categoriesChecked: [],
@@ -762,14 +763,18 @@ const middle = `
             this.searchedItems = this.copyItems.slice();
             this.calculatePages();
             },
-          calculatePages: function () {
-            this.totalCount = this.searchedItems.length;
-            this.pageCount = Math.ceil(this.totalCount / this.pageSize);
-            this.pageIndex = 0;
-            this.pageBtns = Array.from({ length: this.pageCount }, (_, i) => i + 1);
-            this.createPages();
-            this.items = this.pages[0];
-            document.getElementById('contentTypesContainer').scrollIntoView();
+            calculatePages: function () {
+              this.totalCount = this.searchedItems.length;
+              this.pageCount = Math.ceil(this.totalCount / this.pageSize);
+              this.pageIndex = 0;
+              this.pageBtns = Array.from({ length: this.pageCount }, (_, i) => i + 1);
+              this.createPages();
+              this.items = this.pages[0];
+              if (this.loaded) {
+                document.getElementById('contentTypesContainer').scrollIntoView();
+              } else {
+                this.loaded = true;
+              }
             },
             createPages: function () {
             this.pages = [
@@ -812,7 +817,6 @@ const middle = `
   </script>
 </head>
   `;
-
 
 const schema = `
 <script type="application/ld+json">
