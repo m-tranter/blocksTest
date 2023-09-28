@@ -17,7 +17,9 @@ const ROOT_URL = `https://cms-chesheast.cloud.contensis.com/`;
 const PROJECT = 'website';
 const pageSize = 10;
 
-const stripP = (str) => str.replace(/(&nbsp;)?<\/?p[^>]*>/g, '');
+const stripP = (str) => {
+  return str ? str.replace(/(&nbsp;)?<\/?p[^>]*>/g, '') : '';
+};
 
 async function getEntries(req, res) {
   const queries = req.url.split(/\?|&/);
