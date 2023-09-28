@@ -51,8 +51,9 @@ async function getEntries(req, res) {
 
   let item = await resp.json();
   const title = item.title || '';
-  item.description = stripP(item.excerpt);
-  const description = item.description || '';
+  const description = item.excerpt
+    ? stripP(item.excerpt)
+    : stripP(item.entryDescription);
   const contentType = item.contentTypeAPIName || '';
   const topHtml = ejs.render(top, { description: description, title: title });
 
@@ -80,7 +81,7 @@ async function getEntries(req, res) {
       address2: address2,
       postcode: postcode,
       price: item.adultTicketPrice,
-      pub_date: item.sys.version.published
+      pub_date: item.sys.version.published,
     });
     item = changeTags(addDates(item));
     const entryApp = createEntryApp(item);
