@@ -1,115 +1,387 @@
 'use strict';
 
 const top = `
-  <!DOCTYPE html>
-  <html lang="en">
-    <head>
-      <meta charset="UTF-8" />
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
     <meta name="description" content="<%= description %>" />
-      <meta name="viewport" content="width=device-width, initial-scale=1" />
-      <link
-        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css"
-        rel="stylesheet"
-        integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD"
-        crossorigin="anonymous"
-      />
-      <link
-        href="/siteelements/css/bs5/400-cec-styles.css"
-        rel="stylesheet"
-        type="text/css"
-      />
-      <link
-        href="/SiteElements/css/bs5/600-events-vue-axios.css"
-        rel="stylesheet"
-        type="text/css"
-      />
-      <link
-        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700"
-        rel="stylesheet"
-      />
-      <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
-      <script type="text/javascript" src="https://www.browsealoud.com/plus/scripts/3.1.0/ba.js" crossorigin="anonymous"> </script>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD"
+      crossorigin="anonymous"
+    />
+    <link
+      href="/siteelements/css/bs5/400-cec-styles.css"
+      rel="stylesheet"
+      type="text/css"
+    />
+    <link
+      href="/SiteElements/css/bs5/600-events-vue-axios.css"
+      rel="stylesheet"
+      type="text/css"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700"
+      rel="stylesheet"
+    />
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <script
+      type="text/javascript"
+      src="https://www.browsealoud.com/plus/scripts/3.1.0/ba.js"
+      crossorigin="anonymous"
+    ></script>
+    <script>
+      (function (w, d, s, l, i) {
+        w[l] = w[l] || [];
+        w[l].push({ 'gtm.start': new Date().getTime(), event: 'gtm.js' });
+        var f = d.getElementsByTagName(s)[0],
+          j = d.createElement(s),
+          dl = l != 'dataLayer' ? '&l=' + l : '';
+        j.async = true;
+        j.src = 'https://www.googletagmanager.com/gtm.js?id=' + i + dl;
+        f.parentNode.insertBefore(j, f);
+      })(window, document, 'script', 'dataLayer', 'GTM-5ZQX9F');
+    </script>
+    <script>
+      !(function (t) {
+        var e = {};
+        function n(o) {
+          if (e[o]) return e[o].exports;
+          var s = (e[o] = { i: o, l: !1, exports: {} });
+          return t[o].call(s.exports, s, s.exports, n), (s.l = !0), s.exports;
+        }
+        (n.m = t),
+          (n.c = e),
+          (n.d = function (t, e, o) {
+            n.o(t, e) ||
+              Object.defineProperty(t, e, { enumerable: !0, get: o });
+          }),
+          (n.r = function (t) {
+            'undefined' != typeof Symbol &&
+              Symbol.toStringTag &&
+              Object.defineProperty(t, Symbol.toStringTag, { value: 'Module' }),
+              Object.defineProperty(t, '__esModule', { value: !0 });
+          }),
+          (n.t = function (t, e) {
+            if ((1 & e && (t = n(t)), 8 & e)) return t;
+            if (4 & e && 'object' == typeof t && t && t.__esModule) return t;
+            var o = Object.create(null);
+            if (
+              (n.r(o),
+              Object.defineProperty(o, 'default', { enumerable: !0, value: t }),
+              2 & e && 'string' != typeof t)
+            )
+              for (var s in t)
+                n.d(
+                  o,
+                  s,
+                  function (e) {
+                    return t[e];
+                  }.bind(null, s)
+                );
+            return o;
+          }),
+          (n.n = function (t) {
+            var e =
+              t && t.__esModule
+                ? function () {
+                    return t.default;
+                  }
+                : function () {
+                    return t;
+                  };
+            return n.d(e, 'a', e), e;
+          }),
+          (n.o = function (t, e) {
+            return Object.prototype.hasOwnProperty.call(t, e);
+          }),
+          (n.p = 'https://www.browsealoud.com/modules/3.1.0/'),
+          n((n.s = 0));
+      })([
+        function (t, e) {
+          !(function () {
+            function t(t, e) {
+              var n = document.createElement('script');
+              (n.type = 'text/javascript'),
+                (n.src =
+                  'https://www.browsealoud.com/modules/' +
+                  t +
+                  '/browsealoud.js'),
+                null != e &&
+                  void 0 !== e.integrity &&
+                  (n.setAttribute('crossorigin', 'anonymous'),
+                  n.setAttribute('integrity', e.integrity));
+              var o = setInterval(function () {
+                document.body &&
+                  (document.body.appendChild(n), clearInterval(o));
+              }, 100);
+            }
+            function e(e) {
+              if ('3.1.0' > e) t(e);
+              else {
+                var n = new XMLHttpRequest();
+                (n.onreadystatechange = function () {
+                  if (4 == this.readyState && 200 == this.status) {
+                    var o = n.responseText,
+                      s = JSON.parse(o);
+                    t(e, s);
+                  }
+                }),
+                  n.open(
+                    'GET',
+                    'https://www.browsealoud.com/modules/' + e + '/sri.json',
+                    !0
+                  ),
+                  n.send();
+              }
+            }
+            function n(t) {
+              var e = a
+                  ? 'https://plus.browsealoud.com/modules/' + t + '/sri.json'
+                  : 'https://www.browsealoud.com/plus/sri-directives.json',
+                n = new XMLHttpRequest();
+              (n.onreadystatechange = function () {
+                if (4 == this.readyState && 200 == this.status) {
+                  var e = n.responseText,
+                    o = JSON.parse(e);
+                  !(function (t, e) {
+                    var n = document.createElement('script');
+                    (n.type = 'text/javascript'),
+                      a
+                        ? ((n.src =
+                            'https://plus.browsealoud.com/modules/' +
+                            t +
+                            '/browsealoud.min.js'),
+                          n.setAttribute('crossorigin', 'anonymous'),
+                          n.setAttribute('integrity', e.integrity))
+                        : ((n.src =
+                            'https://www.browsealoud.com/plus/scripts/' +
+                            t +
+                            '/ba.js'),
+                          n.setAttribute('crossorigin', 'anonymous'),
+                          n.setAttribute('integrity', e['@' + t].integrity));
+                    var o = setInterval(function () {
+                      document.body &&
+                        (document.body.appendChild(n), clearInterval(o));
+                    }, 100);
+                  })(t, o);
+                }
+              }),
+                n.open('GET', e, !0),
+                n.send();
+            }
+            function o() {
+              var t = 'undefined' == typeof _ba_domain ? null : _ba_domain;
+              if (null != t && '' != t)
+                for (
+                  l.push(t),
+                    l.push(
+                      0 === t.indexOf('www')
+                        ? t.substring(location.hostname.indexOf('.') + 1)
+                        : 'www.' + t
+                    ),
+                    s = (o = t.split('.')).length - 1;
+                  1 < s;
 
-<script>
-  (function (w, d, s, l, i) {
-    w[l] = w[l] || [];
-    w[l].push({ 'gtm.start': new Date().getTime(), event: 'gtm.js' });
-    var f = d.getElementsByTagName(s)[0],
-      j = d.createElement(s),
-      dl = l != 'dataLayer' ? '&l=' + l : '';
-    j.async = true;
-    j.src = 'https://www.googletagmanager.com/gtm.js?id=' + i + dl;
-    f.parentNode.insertBefore(j, f);
-  })(window, document, 'script', 'dataLayer', 'GTM-5ZQX9F');
-</script>
-<script>
-  !function(t){var e={};function n(o){if(e[o])return e[o].exports;var s=e[o]={i:o,l:!1,exports:{}};return t[o].call(s.exports,s,s.exports,n),s.l=!0,s.exports}n.m=t,n.c=e,n.d=function(t,e,o){n.o(t,e)||Object.defineProperty(t,e,{enumerable:!0,get:o})},n.r=function(t){"undefined"!=typeof Symbol&&Symbol.toStringTag&&Object.defineProperty(t,Symbol.toStringTag,{value:"Module"}),Object.defineProperty(t,"__esModule",{value:!0})},n.t=function(t,e){if(1&e&&(t=n(t)),8&e)return t;if(4&e&&"object"==typeof t&&t&&t.__esModule)return t;var o=Object.create(null);if(n.r(o),Object.defineProperty(o,"default",{enumerable:!0,value:t}),2&e&&"string"!=typeof t)for(var s in t)n.d(o,s,function(e){return t[e]}.bind(null,s));return o},n.n=function(t){var e=t&&t.__esModule?function(){return t.default}:function(){return t};return n.d(e,"a",e),e},n.o=function(t,e){return Object.prototype.hasOwnProperty.call(t,e)},n.p="https://www.browsealoud.com/modules/3.1.0/",n(n.s=0)}([function(t,e){!function(){function t(t,e){var n=document.createElement("script");n.type="text/javascript",n.src="https://www.browsealoud.com/modules/"+t+"/browsealoud.js",null!=e&&void 0!==e.integrity&&(n.setAttribute("crossorigin","anonymous"),n.setAttribute("integrity",e.integrity));var o=setInterval((function(){document.body&&(document.body.appendChild(n),clearInterval(o))}),100)}function e(e){if("3.1.0">e)t(e);else{var n=new XMLHttpRequest;n.onreadystatechange=function(){if(4==this.readyState&&200==this.status){var o=n.responseText,s=JSON.parse(o);t(e,s)}},n.open("GET","https://www.browsealoud.com/modules/"+e+"/sri.json",!0),n.send()}}function n(t){var e=a?"https://plus.browsealoud.com/modules/"+t+"/sri.json":"https://www.browsealoud.com/plus/sri-directives.json",n=new XMLHttpRequest;n.onreadystatechange=function(){if(4==this.readyState&&200==this.status){var e=n.responseText,o=JSON.parse(e);!function(t,e){var n=document.createElement("script");n.type="text/javascript",a?(n.src="https://plus.browsealoud.com/modules/"+t+"/browsealoud.min.js",n.setAttribute("crossorigin","anonymous"),n.setAttribute("integrity",e.integrity)):(n.src="https://www.browsealoud.com/plus/scripts/"+t+"/ba.js",n.setAttribute("crossorigin","anonymous"),n.setAttribute("integrity",e["@"+t].integrity));var o=setInterval((function(){document.body&&(document.body.appendChild(n),clearInterval(o))}),100)}(t,o)}},n.open("GET",e,!0),n.send()}function o(){var t="undefined"==typeof _ba_domain?null:_ba_domain;if(null!=t&&""!=t)for(l.push(t),l.push(0===t.indexOf("www")?t.substring(location.hostname.indexOf(".")+1):"www."+t),s=(o=t.split(".")).length-1;1<s;){var e=o.slice(-1*s).join(".");l.push(e),s--}else{l.push(location.host);for(var n=-1<document.URL.indexOf("https")?8:7,o=document.URL.substring(n,document.URL.indexOf("/",n)).split("."),s=o.length-1;1<s;){e=o.slice(-1*s).join(".");l.push(e),s--}l.push(0===location.hostname.indexOf("www")?location.hostname.substring(location.hostname.indexOf(".")+1):"www."+location.hostname)}r()}function s(t){null!=t&&(void 0!==t.version&&""!=t.version&&"latest"!=t.version?i||u?n(d.ie):"3.0.0">t.version?n(t.version):e(t.version):i||u?n(d.ie):e(d.latest))}function r(){var t="https://plus.browsealoud.com/js/urlinfo/"+l[c]+".js",e=new XMLHttpRequest;e.onreadystatechange=function(){if(4==this.readyState&&200==this.status){var t=e.responseText.replace(/var BrowseAloudUrl\s?=/,"");t=t.replace(";",""),s(JSON.parse(t))}4==this.readyState&&200!=this.status&&(console.log(this.readyState,this.status),c<l.length&&(c++,r()))},e.open("GET",t,!0),e.send()}window.toggleBar=function(){BrowseAloud.panel.toggleBar(!0)};var i=!1,a=!1;if("pdf.browsealoud.com"==window.location.host||"pdfqa.browsealoud.com"==window.location.host)a=!0;if(-1!==navigator.userAgent.indexOf("MSIE")||-1<navigator.appVersion.indexOf("Trident/"))i=!0;var u=!1;if(/Edge/.test(navigator.userAgent))u=!0;var l=[],c=0,d={ie:"2.6.1",latest:"3.1.0"};!function(){var t=new XMLHttpRequest;t.onreadystatechange=function(){if(4==this.readyState&&200==this.status){var e=t.responseText;d=JSON.parse(e),o()}4==this.readyState&&200!=this.status&&o()},t.open("GET","https://www.browsealoud.com/version.json",!0),t.send()}()}()}]);
+                ) {
+                  var e = o.slice(-1 * s).join('.');
+                  l.push(e), s--;
+                }
+              else {
+                l.push(location.host);
+                for (
+                  var n = -1 < document.URL.indexOf('https') ? 8 : 7,
+                    o = document.URL.substring(
+                      n,
+                      document.URL.indexOf('/', n)
+                    ).split('.'),
+                    s = o.length - 1;
+                  1 < s;
 
+                ) {
+                  e = o.slice(-1 * s).join('.');
+                  l.push(e), s--;
+                }
+                l.push(
+                  0 === location.hostname.indexOf('www')
+                    ? location.hostname.substring(
+                        location.hostname.indexOf('.') + 1
+                      )
+                    : 'www.' + location.hostname
+                );
+              }
+              r();
+            }
+            function s(t) {
+              null != t &&
+                (void 0 !== t.version &&
+                '' != t.version &&
+                'latest' != t.version
+                  ? i || u
+                    ? n(d.ie)
+                    : '3.0.0' > t.version
+                    ? n(t.version)
+                    : e(t.version)
+                  : i || u
+                  ? n(d.ie)
+                  : e(d.latest));
+            }
+            function r() {
+              var t = 'https://plus.browsealoud.com/js/urlinfo/' + l[c] + '.js',
+                e = new XMLHttpRequest();
+              (e.onreadystatechange = function () {
+                if (4 == this.readyState && 200 == this.status) {
+                  var t = e.responseText.replace(/var BrowseAloudUrl\s?=/, '');
+                  (t = t.replace(';', '')), s(JSON.parse(t));
+                }
+                4 == this.readyState &&
+                  200 != this.status &&
+                  (console.log(this.readyState, this.status),
+                  c < l.length && (c++, r()));
+              }),
+                e.open('GET', t, !0),
+                e.send();
+            }
+            window.toggleBar = function () {
+              BrowseAloud.panel.toggleBar(!0);
+            };
+            var i = !1,
+              a = !1;
+            if (
+              'pdf.browsealoud.com' == window.location.host ||
+              'pdfqa.browsealoud.com' == window.location.host
+            )
+              a = !0;
+            if (
+              -1 !== navigator.userAgent.indexOf('MSIE') ||
+              -1 < navigator.appVersion.indexOf('Trident/')
+            )
+              i = !0;
+            var u = !1;
+            if (/Edge/.test(navigator.userAgent)) u = !0;
+            var l = [],
+              c = 0,
+              d = { ie: '2.6.1', latest: '3.1.0' };
+            !(function () {
+              var t = new XMLHttpRequest();
+              (t.onreadystatechange = function () {
+                if (4 == this.readyState && 200 == this.status) {
+                  var e = t.responseText;
+                  (d = JSON.parse(e)), o();
+                }
+                4 == this.readyState && 200 != this.status && o();
+              }),
+                t.open('GET', 'https://www.browsealoud.com/version.json', !0),
+                t.send();
+            })();
+          })();
+        },
+      ]);
 
-  function updateToggleText() {
-  var x = document.getElementById("baToggleText");
-  if (x.innerText === "Listen and translate") {
-    x.innerText = "Close listen and translate";
-  } else {
-    x.innerText = "Listen and translate";
-  }
-}
-BrowseAloud.disableBrowsealoudAnalytics();
-</script>
-      <title><%= title%></title>
-    </head>
+      function updateToggleText() {
+        var x = document.getElementById('baToggleText');
+        if (x.innerText === 'Listen and translate') {
+          x.innerText = 'Close listen and translate';
+        } else {
+          x.innerText = 'Listen and translate';
+        }
+      }
+      BrowseAloud.disableBrowsealoudAnalytics();
+    </script>
+    <title><%= title%></title>
   `;
 
 const bottom = `
   <body>
-  <div id="__ba_panel"></div>
+    <div id="__ba_panel"></div>
     <header class="cec-header">
       <div class="container">
-  <div class="row">
-        <div class="col-auto">
-          <a
-            class="navbar-brand border border-0 border-secondary"
-            title="Home"
-            href="/home.aspx"
-          >
-            <img
-              title="Home page"
-              alt="Cheshire East Council home page"
-              height="70"
-              width="155"
-              src="/images/non_user/cec-logo-colour-155x70px.png"
-            />
-            <span class="visually-hidden"
-              >Cheshire East Council website home page</span
-            ></a
-          >
+        <div class="row">
+          <div class="col-auto">
+            <a
+              class="navbar-brand border border-0 border-secondary"
+              title="Home"
+              href="/home.aspx"
+            >
+              <img
+                title="Home page"
+                alt="Cheshire East Council home page"
+                height="70"
+                width="155"
+                src="/images/non_user/cec-logo-colour-155x70px.png"
+              />
+              <span class="visually-hidden"
+                >Cheshire East Council website home page</span
+              ></a
+            >
+          </div>
+          <div class="col w-100 text-end" style="font-weight: 600">
+            <div class="ba_listenTranslateToggle d-inline">
+              <a
+                class="nav-link pe-0 d-inline ps-0"
+                onclick="BrowseAloud.panel.toggleBar(); updateToggleText()"
+                href="#"
+              >
+                <i role="img" aria-label="Listen">
+                  <svg
+                    class="d-inline"
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="22"
+                    height="22"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      d="M22 0v24l-11-6v-2.278l9 4.909v-17.262l-9 4.91v-2.279l11-6zm-13 6v12h-7v-12h7z"
+                    ></path>
+                    <title>Audio icon</title>
+                  </svg>
+                </i>
+                <i role="img" aria-label="Translate">
+                  <svg
+                    class="d-inline"
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      d="M17.246 4.042c-3.36 0-3.436-2.895-7.337-2.895-2.108 0-4.075.98-4.909 1.694v-2.841h-2v24h2v-9.073c1.184-.819 2.979-1.681 4.923-1.681 3.684 0 4.201 2.754 7.484 2.754 2.122 0 3.593-1.359 3.593-1.359v-12.028s-1.621 1.429-3.754 1.429zm1.754 9.544c-.4.207-.959.414-1.593.414-.972 0-1.498-.363-2.371-.964-1.096-.755-2.596-1.79-5.113-1.79-1.979 0-3.71.679-4.923 1.339v-7.488c1.019-.902 2.865-1.949 4.909-1.949 1.333 0 1.894.439 2.741 1.103.966.756 2.288 1.792 4.596 1.792.627 0 1.215-.086 1.754-.223v7.766z"
+                    ></path>
+                    <title>Translate icon</title>
+                  </svg>
+                </i>
+                <span id="baToggleText" class="d-none d-lg-inline"
+                  >Listen and translate</span
+                >
+              </a>
+            </div>
+            <a
+              class="nav-link d-inline pe-0"
+              href="/account/cheshire-east-account.aspx"
+            >
+              <i role="img" aria-label="Account">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="26"
+                  height="26"
+                  fill="Black"
+                  class="bi bi-person"
+                  viewBox="0 0 16 16"
+                >
+                  <path
+                    d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0zm4 8c0 1-1 1-1 1H3s-1 0-1-1 1-4 6-4 6 3 6 4zm-1-.004c-.001-.246-.154-.986-.832-1.664C11.516 10.68 10.289 10 8 10c-2.29 0-3.516.68-4.168 1.332-.678.678-.83 1.418-.832 1.664h10z"
+                  />
+                  <title>Account icon</title>
+                </svg>
+              </i>
+              <span class="d-none d-lg-inline">My account</span>
+            </a>
+          </div>
         </div>
-<div class="col w-100 text-end" style="font-weight: 600">
-  <div class="ba_listenTranslateToggle d-inline">
-
-    <a class="nav-link pe-0 d-inline ps-0" onclick="BrowseAloud.panel.toggleBar(); updateToggleText()" href="#">
-      <i role="img" aria-label="Listen">
-            <svg class="d-inline" xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24">
-              <path d="M22 0v24l-11-6v-2.278l9 4.909v-17.262l-9 4.91v-2.279l11-6zm-13 6v12h-7v-12h7z"></path>
-              <title>Audio icon</title>
-            </svg>
-            </i> <i role="img" aria-label="Translate">
-            <svg class="d-inline" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
-              <path d="M17.246 4.042c-3.36 0-3.436-2.895-7.337-2.895-2.108 0-4.075.98-4.909 1.694v-2.841h-2v24h2v-9.073c1.184-.819 2.979-1.681 4.923-1.681 3.684 0 4.201 2.754 7.484 2.754 2.122 0 3.593-1.359 3.593-1.359v-12.028s-1.621 1.429-3.754 1.429zm1.754 9.544c-.4.207-.959.414-1.593.414-.972 0-1.498-.363-2.371-.964-1.096-.755-2.596-1.79-5.113-1.79-1.979 0-3.71.679-4.923 1.339v-7.488c1.019-.902 2.865-1.949 4.909-1.949 1.333 0 1.894.439 2.741 1.103.966.756 2.288 1.792 4.596 1.792.627 0 1.215-.086 1.754-.223v7.766z"></path>
-              <title>Translate icon</title>
-            </svg>
-            </i> <span id="baToggleText" class="d-none d-lg-inline">Listen and translate</span> </a>
-  </div>
-  <a class="nav-link d-inline pe-0" href="/account/cheshire-east-account.aspx"> <i role="img" aria-label="Account">
-            <svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" fill="Black" class="bi bi-person" viewBox="0 0 16 16">
-              <path d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0zm4 8c0 1-1 1-1 1H3s-1 0-1-1 1-4 6-4 6 3 6 4zm-1-.004c-.001-.246-.154-.986-.832-1.664C11.516 10.68 10.289 10 8 10c-2.29 0-3.516.68-4.168 1.332-.678.678-.83 1.418-.832 1.664h10z"/>
-              <title>Account icon</title>
-            </svg>
-            </i> <span class="d-none d-lg-inline">My account</span> </a>
-</div>
-
       </div>
-  </div>
     </header>
     <div class="container mt-3">
       <div id="app" class="mt-3"><%- html%></div>
@@ -303,106 +575,107 @@ const bottom = `
       </div>
     </footer>
 
-<script src="https://cc.cdn.civiccomputing.com/9/cookieControl-9.x.min.js"></script>
-<script>
-  var config = {
-    apiKey: 'c1a902dfad207b122cca32738e623af375e1d2ee',
-    product: 'PRO_MULTISITE',
-    mode: 'gdpr',
-    consentCookieExpiry: '365',
-    statement: {
-      description: 'For more information visit our',
-      name: 'Cookies page',
-      url: '/council_and_democracy/council_information/website_information/website_information.aspx',
-      updated: '08/09/2020',
-    },
-    accessibility: {
-      outline: true,
-    },
-    optionalCookies: [
-      {
-        name: 'analytics',
-        label: 'Analytics cookies',
-        description:
-          'We would like to set Google Analytics cookies. This helps us to improve our website by collecting and reporting information on its usage and is done in a way that does not directly identify anyone.',
-        cookies: [
-          '_ga',
-          '_gid',
-          '__utma',
-          '__utmt',
-          '__utmb',
-          '__utmc',
-          '__utmz',
-          '__utm.gif',
+    <script src="https://cc.cdn.civiccomputing.com/9/cookieControl-9.x.min.js"></script>
+    <script>
+      var config = {
+        apiKey: 'c1a902dfad207b122cca32738e623af375e1d2ee',
+        product: 'PRO_MULTISITE',
+        mode: 'gdpr',
+        consentCookieExpiry: '365',
+        statement: {
+          description: 'For more information visit our',
+          name: 'Cookies page',
+          url: '/council_and_democracy/council_information/website_information/website_information.aspx',
+          updated: '08/09/2020',
+        },
+        accessibility: {
+          outline: true,
+        },
+        optionalCookies: [
+          {
+            name: 'analytics',
+            label: 'Analytics cookies',
+            description:
+              'We would like to set Google Analytics cookies. This helps us to improve our website by collecting and reporting information on its usage and is done in a way that does not directly identify anyone.',
+            cookies: [
+              '_ga',
+              '_gid',
+              '__utma',
+              '__utmt',
+              '__utmb',
+              '__utmc',
+              '__utmz',
+              '__utm.gif',
+            ],
+            onAccept: function () {
+              // Add Google Analytics via GTM
+              // assumes the associated event has been created within GTM
+              // and that event in turn loads analytics
+              dataLayer.push({
+                event: 'analytics_consent_given',
+              });
+              // End Google Analytics
+            },
+            onRevoke: function () {},
+          },
+          {
+            name: 'marketing',
+            label: 'Marketing cookies',
+            description:
+              'We would like to embed Facebook feeds. In return they use marketing cookies to track visitors across websites. The intention is to display ads that are relevant and engaging for the individual user and thereby more valuable for publishers and third party advertisers.',
+            cookies: ['guest_id', 'personalization_id'],
+            onAccept: function () {
+              // Facebook feed
+              !(function (d, s, id) {
+                var js,
+                  fjs = d.getElementsByTagName(s)[0];
+                if (d.getElementById(id)) return;
+                js = d.createElement(s);
+                js.id = id;
+                js.src =
+                  '//connect.facebook.net/en_GB/sdk.js#xfbml=1&version=v2.3';
+                fjs.parentNode.insertBefore(js, fjs);
+              })(document, 'script', 'facebook-jssdk');
+            },
+            onRevoke: function () {
+              fjs('consent', 'revoke');
+            },
+          },
         ],
-        onAccept: function () {
-          // Add Google Analytics via GTM
-          // assumes the associated event has been created within GTM
-          // and that event in turn loads analytics
-          dataLayer.push({
-            event: 'analytics_consent_given',
-          });
-          // End Google Analytics
+        position: 'LEFT',
+        theme: 'DARK',
+        branding: {
+          fontColor: '#FFF',
+          fontSizeTitle: '1.2em',
+          fontSizeIntro: '1em',
+          fontSizeHeaders: '1em',
+          fontSize: '1em',
+          backgroundColor: '#206c49',
+          toggleText: '#fff',
+          toggleColor: '#68907e',
+          toggleBackground: '#144a31',
+          buttonIcon: null,
+          buttonIconWidth: '64px',
+          buttonIconHeight: '64px',
+          removeIcon: false,
+          removeAbout: true,
         },
-        onRevoke: function () {},
-      },
-      {
-        name: 'marketing',
-        label: 'Marketing cookies',
-        description:
-          'We would like to embed Facebook feeds. In return they use marketing cookies to track visitors across websites. The intention is to display ads that are relevant and engaging for the individual user and thereby more valuable for publishers and third party advertisers.',
-        cookies: ['guest_id', 'personalization_id'],
-        onAccept: function () {
-          // Facebook feed
-          !(function (d, s, id) {
-            var js,
-              fjs = d.getElementsByTagName(s)[0];
-            if (d.getElementById(id)) return;
-            js = d.createElement(s);
-            js.id = id;
-            js.src = '//connect.facebook.net/en_GB/sdk.js#xfbml=1&version=v2.3';
-            fjs.parentNode.insertBefore(js, fjs);
-          })(document, 'script', 'facebook-jssdk');
-        },
-        onRevoke: function () {
-          fjs('consent', 'revoke');
-        },
-      },
-    ],
-    position: 'LEFT',
-    theme: 'DARK',
-    branding: {
-      fontColor: '#FFF',
-      fontSizeTitle: '1.2em',
-      fontSizeIntro: '1em',
-      fontSizeHeaders: '1em',
-      fontSize: '1em',
-      backgroundColor: '#206c49',
-      toggleText: '#fff',
-      toggleColor: '#68907e',
-      toggleBackground: '#144a31',
-      buttonIcon: null,
-      buttonIconWidth: '64px',
-      buttonIconHeight: '64px',
-      removeIcon: false,
-      removeAbout: true,
-    },
-  };
-  CookieControl.load(config);
-</script>
+      };
+      CookieControl.load(config);
+    </script>
   </body>
 </html>
   `;
 
 const middle = `
-      <script type="importmap">
-        {
-          "imports": {
-            "vue": "https://unpkg.com/vue@3/dist/vue.esm-browser.prod.js"
-          }
-        }
-      </script>
-    <script type="module">
+  <script type="importmap">
+    {
+      "imports": {
+        "vue": "https://unpkg.com/vue@3/dist/vue.esm-browser.prod.js"
+      }
+    }
+  </script>
+  <script type="module">
       import { createSSRApp } from 'vue';
       function createApp(items) {
         return createSSRApp({
@@ -536,7 +809,50 @@ const middle = `
         })
       };
     createApp().mount('#app');
-    </script>
-  </head>`;
+  </script>
+</head>
+  `;
 
-export { top, bottom, middle };
+const schema = `
+<script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "name": "<%= title %>",
+      "startDate": "<%= start_date %>",
+      "endDate": "<%= end_date %>",
+      "eventAttendanceMode": "https://schema.org/OfflineEventAttendanceMode",
+      "eventStatus": "https://schema.org/EventScheduled",
+      "location": {
+        "@type": "Place",
+        "name": "<%= location %>",
+        "address": {
+          "@type": "PostalAddress",
+          "streetAddress": "<%= address1 %>",
+          "addressLocality": "<%= address2 %> ",
+          "postalCode": "<%= postcode %>",
+          "addressRegion": "Cheshire",
+          "addressCountry": "UK"
+        }
+      },
+      "image": [
+        "<%= image %>",
+       ],
+      "description": "<%= description %>",
+      "offers": {
+      },
+      "performer": {
+        "@type": "PerformingGroup",
+        "name": "<%= leaders %>"
+      },
+      "organizer": {
+        "@type": "Organization",
+        "name": "Cheshire East Rangers",
+        "url": "https://www.cheshireeast.gov.uk/leisure,_culture_and_tourism/ranger_service/ranger_service.aspx"
+      }
+    }
+    </script>
+  </head>
+`;
+
+export { top, bottom, middle, schema };

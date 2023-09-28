@@ -8,7 +8,7 @@ import listTemplate from './listTemplate.js';
 import { createListApp } from './listApp.js';
 import { createEntryApp } from './entryApp.js';
 import { changeTags, addDates, makePages, sortDate } from './helpers.js';
-import { top, bottom, middle } from './ejsTemplates.js';
+import { top, bottom, middle, schema } from './ejsTemplates.js';
 import ejs from 'ejs';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -16,6 +16,8 @@ const dir = path.join(__dirname, '../public');
 const ROOT_URL = `https://cms-chesheast.cloud.contensis.com/`;
 const PROJECT = 'website';
 const pageSize = 10;
+
+const stripP = (str) => str.replace(/(&nbsp;)?<\/?p[^>]*>/g, '');
 
 async function getEntries(req, res) {
   const queries = req.url.split(/\?|&/);
@@ -47,17 +49,38 @@ async function getEntries(req, res) {
 
   let item = await resp.json();
   const title = item.title || '';
-  item.description = item.description.replace(/<\/?p[^>]*>/g, '');
+  item.description = stripP(item.description);
   const description = item.description || '';
   const contentType = item.contentTypeAPIName || '';
   const topHtml = ejs.render(top, { description: description, title: title });
 
   // When it's a single entry.
   if (!contentType) {
+    let meeting_point = stripP(item.meetingPoint)
+      .split(',')
+      .map((e) => e.trim());
+    let postcode = meeting_point[meeting_point.length - 1].split(' ');
+    postcode =
+      postcode.length === 2 ? postcode.join(' ') : postcode.slice(1).join(' ');
+    let location = meeting_point[0];
+    let address1 = meeting_point[1];
+    let address2 = meeting_point[2];
+    let eventSchema = ejs.render(schema, {
+      title: title,
+      description: description,
+      leaders: item.leaders,
+      image: `www.cheshireeast.gov.uk${item.image.asset.sys.uri}`,
+      start_date: item.dateStartEnd.from,
+      end_date: item.dateStartEnd.to,
+      location: location, 
+      address1: address1,
+      address2: address2,
+      postcode: postcode,
+    });
     item = changeTags(addDates(item));
     const entryApp = createEntryApp(item);
     renderToString(entryApp).then((html) => {
-      res.send(`${topHtml}${ejs.render(bottom, { html: html })}`);
+      res.send(`${topHtml}${eventSchema}${ejs.render(bottom, { html: html })}`);
     });
     return;
   }
