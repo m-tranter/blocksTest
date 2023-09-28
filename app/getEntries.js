@@ -49,7 +49,7 @@ async function getEntries(req, res) {
 
   let item = await resp.json();
   const title = item.title || '';
-  item.description = stripP(item.description);
+  item.description = stripP(item.excerpt);
   const description = item.description || '';
   const contentType = item.contentTypeAPIName || '';
   const topHtml = ejs.render(top, { description: description, title: title });
@@ -59,9 +59,10 @@ async function getEntries(req, res) {
     let meeting_point = stripP(item.meetingPoint)
       .split(',')
       .map((e) => e.trim());
-    let postcode = meeting_point[meeting_point.length - 1].split(' ');
-    postcode =
-      postcode.length === 2 ? postcode.join(' ') : postcode.slice(1).join(' ');
+    let postcode = meeting_point[meeting_point.length - 1]
+      .split(' ')
+      .slice(0, 2)
+      .join(' ');
     let location = meeting_point[0];
     let address1 = meeting_point[1];
     let address2 = meeting_point[2];
@@ -72,10 +73,12 @@ async function getEntries(req, res) {
       image: `https://www.cheshireeast.gov.uk${item.image.asset.sys.uri}`,
       start_date: item.dateStartEnd.from,
       end_date: item.dateStartEnd.to,
-      location: location, 
+      location: location,
       address1: address1,
       address2: address2,
       postcode: postcode,
+      price: item.adultTicketPrice,
+      pub_date: item.sys.version.published
     });
     item = changeTags(addDates(item));
     const entryApp = createEntryApp(item);

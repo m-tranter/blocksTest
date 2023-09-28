@@ -838,6 +838,10 @@ const schema = `
       "image": "<%= image %>",
       "description": "<%= description %>",
       "offers": {
+        "price": "<%= price %>",
+        "priceCurrency": "GBP",
+        "availability": "https://schema.org/InStock",
+        "validFrom": "<%= pub_date %>"
       },
       "performer": {
         "@type": "PerformingGroup",
