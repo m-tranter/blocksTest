@@ -813,6 +813,7 @@ const middle = `
 </head>
   `;
 
+
 const schema = `
 <script type="application/ld+json">
     {
