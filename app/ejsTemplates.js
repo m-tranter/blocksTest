@@ -324,7 +324,7 @@ const bottom = `
         name: 'analytics',
         label: 'Analytics cookies',
         description:
-          'We\u0027d like to set Google Analytics cookies. This helps us to improve our website by collecting and reporting information on its usage and is done in a way that does not directly identify anyone.',
+          'We would like to set Google Analytics cookies. This helps us to improve our website by collecting and reporting information on its usage and is done in a way that does not directly identify anyone.',
         cookies: [
           '_ga',
           '_gid',
