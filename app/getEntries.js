@@ -69,7 +69,7 @@ async function getEntries(req, res) {
       title: title,
       description: description,
       leaders: item.leaders,
-      image: `www.cheshireeast.gov.uk${item.image.asset.sys.uri}`,
+      image: `https://www.cheshireeast.gov.uk${item.image.asset.sys.uri}`,
       start_date: item.dateStartEnd.from,
       end_date: item.dateStartEnd.to,
       location: location, 
