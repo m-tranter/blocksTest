@@ -18,14 +18,14 @@ async function getSitemap(req, res, contentType) {
   }
 
   const data = await resp.json();
-  let mod = `<lastmod>${data.items[0].sys.version.modified}</lastmod><changefreq>daily</changefreq>`;
-  let msg = `<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"><url><loc>https://www.cheshireeast.gov.uk/${contentType.toLowerCase()}/listing</loc>${mod}</url>`;
+  let cf = "<changefreq>daily</changefreq>";
+  let msg = `<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"><url><loc>https://www.cheshireeast.gov.uk/${contentType.toLowerCase()}/listing</loc><lastmod>${data.items[0].sys.version.modified}</lastmod>${cf}</url>`;
   data.items.forEach((e) => {
-    msg += `<url><loc>https://www.cheshireeast.gov.uk${e.sys.uri}</loc>${mod}</url>`;
+    msg += `<url><loc>https://www.cheshireeast.gov.uk${e.sys.uri}</loc><lastmod>${e.sys.version.modified}</lastmod>${cf}</url>`;
   });
   msg += '</urlset>';
   res.set('Content-Type', 'application/xml');
-  res.send(msg);
+  setTimeout(() => res.send(msg), 5);
   return;
 }
 
