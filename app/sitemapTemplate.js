@@ -1,5 +1,5 @@
 const sitemapTemplate = `
-      <div xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+      <u xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
         <p>
           <a
           >https://www.cheshireeast.gov.uk/{{ctype.toLowerCase()}}/listing</a
@@ -14,7 +14,7 @@ const sitemapTemplate = `
           <b>{{item.sys.version.modified}}</b>
           <i>daily</i>
         </p>
-      </div>
+      </u>
   `;
 
 export default sitemapTemplate;

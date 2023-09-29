@@ -25,7 +25,7 @@ async function getSitemap(req, res, contentType) {
   renderToString(app).then((html) => {
     let xml = ejs.render('<%- html %>', { html: html });
     xml = xml.replace(/<!--.-->/g, '');
-    xml = xml.replace(/div(.)/g, 'urlset$1');
+    xml = xml.replace(/u(\s|>)/g, 'urlset$1');
     xml = xml.replace(/p>/g, 'url>');
     xml = xml.replace(/b>/g, 'lastmod>');
     xml = xml.replace(/i>/g, 'changefreq>');
