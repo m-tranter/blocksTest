@@ -25,7 +25,6 @@ async function getSitemap(req, res, contentType) {
   });
   msg += '</urlset>';
   res.set('Content-Type', 'application/xml');
-  console.log(msg);
   res.send(msg);
   return;
 }
