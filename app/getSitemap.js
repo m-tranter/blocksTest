@@ -1,9 +1,6 @@
 'use strict';
 
-import { renderToString } from 'vue/server-renderer';
 import fetch from 'node-fetch';
-import { createSitemap } from './sitemapApp.js';
-import ejs from 'ejs';
 
 const ROOT_URL = `https://cms-chesheast.cloud.contensis.com/`;
 const PROJECT = 'website';
@@ -21,19 +18,16 @@ async function getSitemap(req, res, contentType) {
   }
 
   const data = await resp.json();
-  const app = createSitemap(data.items, contentType);
-  renderToString(app).then((html) => {
-    let xml = ejs.render('<%- html %>', { html: html });
-    xml = xml.replace(/<!--.-->/g, '');
-    xml = xml.replace(/u(\s|>)/g, 'urlset$1');
-    xml = xml.replace(/p>/g, 'url>');
-    xml = xml.replace(/b>/g, 'lastmod>');
-    xml = xml.replace(/i>/g, 'changefreq>');
-    xml = xml.replace(/a>/g, 'loc>');
-    res.set('Content-Type', 'application/xml');
-    res.send(xml);
-    return;
+  let mod = `<lastmod>${data.items[0].sys.version.modified}</lastmod><changefreq>daily</changefreq>`;
+  let msg = `<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"><url><loc>https://www.cheshireeast.gov.uk/${contentType.toLowerCase()}/listing</loc>${mod}</url>`;
+  data.items.forEach((e) => {
+    msg += `<url><loc>https://www.cheshireeast.gov.uk${e.sys.uri}</loc>${mod}</url>`;
   });
+  msg += '</urlset>';
+  res.set('Content-Type', 'application/xml');
+  console.log(msg);
+  res.send(msg);
+  return;
 }
 
 export default getSitemap;
