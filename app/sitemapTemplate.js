@@ -1,4 +1,3 @@
-
 const sitemapTemplate = `
       <div xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
         <p v-for="item in items">

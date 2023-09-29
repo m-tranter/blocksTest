@@ -7,6 +7,7 @@ import { fileURLToPath } from 'url';
 import listTemplate from './listTemplate.js';
 import { createListApp } from './listApp.js';
 import { createEntryApp } from './entryApp.js';
+import getSitemap from './getSitemap.js';
 import { changeTags, addDates, makePages, sortDate } from './helpers.js';
 import { top, bottom, middle, schema } from './ejsTemplates.js';
 import ejs from 'ejs';
@@ -50,6 +51,11 @@ async function getEntries(req, res) {
   }
 
   let item = await resp.json();
+  if (item.sys.contentTypeId === 'sitemaps') {
+    getSitemap(req, res, item.entryTitle);
+    return;
+  }
+
   const title = item.title || '';
   const description = item.excerpt
     ? stripP(item.excerpt)

@@ -4,7 +4,6 @@ import express from 'express';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import getEntries from './getEntries.js';
-import getSitemap from './getSitemap.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const dir = path.join(__dirname, '../public');
@@ -30,10 +29,6 @@ server.use(myLogger);
 server.get(/.*\.(js|css)$/, (req, res) => {
   const filePath = path.join(dir, req.url);
   res.sendFile(filePath);
-});
-
-server.get(/.*\.(xml)$/, (req, res) => {
-  getSitemap(req, res);
 });
 
 server.get('*', (req, res) => {
