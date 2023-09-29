@@ -384,7 +384,7 @@ const bottom = `
       </div>
     </header>
     <div class="container mt-3">
-      <div id="app" class="mt-3"><%- html%></div>
+      <div id="app" class="mt-3"><%- html %></div>
     </div>
     <footer class="mt-5">
       <!-- footer header -->
