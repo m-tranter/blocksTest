@@ -840,7 +840,11 @@ const schema = `
           "addressCountry": "UK"
         }
       },
-      "image": "<%= image %>",
+      "image": [
+        "<%= image %>",
+        "<%= image %>",
+        "<%= image %>"
+      ],
       "description": "<%= description %>",
       "offers": {
         "price": "<%= price %>",
