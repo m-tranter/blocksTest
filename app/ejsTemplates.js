@@ -296,6 +296,9 @@ const top = `
 
 const bottom = `
   <body>
+<div class="visually-hidden-focusable overflow-hidden">
+  <div class="d-print-none"><a tabindex="1" id="skip" class="skip-to-content position-absolute py-1 px-2" style="z-index: 100000;" href="#app">Skip to content</a></div>
+</div>
     <div id="__ba_panel"></div>
     <header class="cec-header">
       <div class="container">
