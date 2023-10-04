@@ -844,9 +844,9 @@ const schema = `
         }
       },
       "image": [
-        "<%= image %>?width=400&height=300&fit=crop",
         "<%= image %>?width=300&height=300&fit=crop",
-        "<%= image %>?width=496&height=279&fit=crop",
+        "<%= image %>?width=400&height=300&fit=crop",
+        "<%= image %>?width=496&height=279&fit=crop"
       ],
       "description": "<%= description %>",
       "offers": {
