@@ -850,6 +850,7 @@ const schema = `
       ],
       "description": "<%= description %>",
       "offers": {
+        "@type": "Offer",
         "price": "<%= price %>",
         "priceCurrency": "GBP",
         "availability": "https://schema.org/InStock",
