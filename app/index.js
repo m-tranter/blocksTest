@@ -27,6 +27,8 @@ server.use(express.json());
 server.use(myLogger);
 server.set('view engine', 'ejs');
 
+server.set('views', path.join(__dirname, '../views'));
+
 server.get(/.*\.(js|css)$/, (req, res) => {
   const filePath = path.join(dir, req.url);
   res.sendFile(filePath);
