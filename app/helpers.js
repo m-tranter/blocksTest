@@ -1,4 +1,4 @@
-'use stricy';
+'use strict';
 
 const dateOptions = {
   weekday: 'long',

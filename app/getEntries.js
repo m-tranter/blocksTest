@@ -9,7 +9,7 @@ import { createListApp } from './listApp.js';
 import { createEntryApp } from './entryApp.js';
 import getSitemap from './getSitemap.js';
 import { changeTags, addDates, makePages, sortDate } from './helpers.js';
-import { top, bottom, middle, schema } from './ejsTemplates.js';
+import { clientApp, schema } from './ejsTemplates.js';
 import ejs from 'ejs';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -61,7 +61,6 @@ async function getEntries(req, res) {
     ? stripP(item.excerpt)
     : stripP(item.entryDescription);
   const contentType = item.contentTypeAPIName || '';
-  const topHtml = ejs.render(top, { description: description, title: title });
 
   // When it's a single entry.
   if (!contentType) {
@@ -75,7 +74,7 @@ async function getEntries(req, res) {
     let location = meeting_point[0];
     let address1 = meeting_point[1];
     let address2 = meeting_point[2];
-    let eventSchema = ejs.render(schema, {
+    let head_end = ejs.render(schema, {
       title: title,
       description: description,
       leaders: item.leaders,
@@ -92,7 +91,7 @@ async function getEntries(req, res) {
     item = changeTags(addDates(item));
     const entryApp = createEntryApp(item);
     renderToString(entryApp).then((html) => {
-      res.send(`${topHtml}${eventSchema}${ejs.render(bottom, { html: html })}`);
+      res.render('index', { description, title, html, head_end });
     });
     return;
   }
@@ -116,16 +115,15 @@ async function getEntries(req, res) {
   const { btns, pages } = makePages([...items], pageSize);
   const app = createListApp(items, title, pages, btns, pageSize);
   renderToString(app).then((html) => {
-    res.send(
-      `${topHtml}${ejs.render(middle, {
-        items: items,
-        title: title,
-        pages: pages,
-        btns: btns,
-        pageSize: pageSize,
-        template: listTemplate,
-      })}${ejs.render(bottom, { html: html })}`
-    );
+    let head_end = ejs.render(clientApp, {
+      items: items,
+      title: title,
+      pages: pages,
+      btns: btns,
+      pageSize: pageSize,
+      template: listTemplate,
+    });
+    res.render('index', { description, title, html, head_end });
   });
 }
 
