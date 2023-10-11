@@ -17,7 +17,7 @@ const dir = path.join(__dirname, '../public');
 const ROOT_URL = `https://cms-chesheast.cloud.contensis.com/`;
 const PROJECT = 'website';
 const pageSize = 10;
-let breadcrumb = "<li class='breadcrumb-item'>Rangers events listing</li>";
+const breadcrumb = "<li class='breadcrumb-item'>Rangers events listing</li>";
 
 const stripP = (str) => {
   return str ? str.replace(/(&nbsp;)?<\/?p[^>]*>/g, '') : '';
@@ -90,11 +90,11 @@ async function getEntries(req, res) {
       pub_date: item.sys.version.published,
     });
     item = changeTags(addDates(item));
-    breadcrumb = `<li class='breadcrumb-item'><a href="/rangerevents/listing">Rangers events listing</a></li>
+    let bc = `<li class='breadcrumb-item'><a href="/rangerevents/listing">Rangers events listing</a></li>
       <li class='breadcrumb-item'>${item.entryTitle}</li>`;
     const entryApp = createEntryApp(item);
     renderToString(entryApp).then((html) => {
-      res.render('index', { breadcrumb, description, title, html, head_end });
+      res.render('index', { breadcrumb: bc, description, title, html, head_end });
     });
     return;
   }
