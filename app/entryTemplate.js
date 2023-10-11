@@ -1,6 +1,5 @@
 const entryTemplate = `
   <div>
-  <a href="/rangerevents/listing" class="cec-button cec-button--back">Back</a>
   <h1 class="selected-item-details--title text-center">{{item.title}}</h1>
   <template v-if="item.startDate === item.endDate">
     <p class="text-center fs-5">{{item.startDate}}.</p></template
@@ -66,7 +65,6 @@ const entryTemplate = `
       </div>
       <div class="col-12">
         <hr />
-        <a href="/rangerevents/listing" class="cec-button cec-button--back">Back</a>
       </div>
     </div>
   </div>
