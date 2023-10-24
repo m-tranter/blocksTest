@@ -1,28 +1,18 @@
 'use strict';
 
-const clientApp = `
-  <script type="importmap">
-    {
-      "imports": {
-        "vue": "https://unpkg.com/vue@3/dist/vue.esm-browser.prod.js"
-      }
-    }
-  </script>
-  <script type="module">
-      import { createSSRApp } from 'vue';
-      function createApp(items) {
+const appInner = `
         return createSSRApp({
           data: () => ({
-          h1: "<%= title %>",
+          h1: title,
           loaded: false,
-          pages: <%- JSON.stringify(pages) %>,
-          copyItems: <%- JSON.stringify(items) %>,
+          pages: pages,
+          copyItems: items,
           categoriesChecked: [],
           pageIndex: 0,
-          totalCount: <%= items.length %>,
-          pageSize: <%= pageSize %>,
-          pageCount: <%= btns.length %>,
-          pageBtns: <%- JSON.stringify(btns) %>,
+          totalCount: items.length,
+          pageSize: pageSize,
+          pageCount: btns.length,
+          pageBtns: btns,
           searchFields: ['title', 'description'],
           searchAlert: false,
           searchTerm: '',
@@ -145,9 +135,6 @@ const clientApp = `
         },
           template: \`<%- template %>\`,
         })
-      };
-    createApp().mount('#app');
-  </script>
   `;
 
 const schema = `
@@ -198,4 +185,21 @@ const schema = `
     </script>
 `;
 
-export { clientApp,  schema };
+const appOuter = `
+  <script type="importmap">
+    {
+      "imports": {
+        "vue": "https://unpkg.com/vue@3/dist/vue.esm-browser.prod.js"
+      }
+    }
+  </script>
+  <script type="module">
+      import { createSSRApp } from 'vue';
+      function createApp(items, title, pages, btns, pageSize) {
+        <%- appBody %>
+      }
+      createApp(<%- JSON.stringify(items) %>, <%- JSON.stringify(title) %>, <%- JSON.stringify(pages) %>, <%- JSON.stringify(btns) %>, <%= pageSize %>).mount('#app');
+</script>
+`;
+
+export { appOuter, appInner, schema };

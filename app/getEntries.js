@@ -1,15 +1,21 @@
 'use strict';
 
+import { createSSRApp } from 'vue';
 import { renderToString } from 'vue/server-renderer';
 import fetch from 'node-fetch';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import listTemplate from './listTemplate.js';
-import { createListApp } from './listApp.js';
 import { createEntryApp } from './entryApp.js';
 import getSitemap from './getSitemap.js';
-import { changeTags, addDates, makePages, sortDate } from './helpers.js';
-import { clientApp, schema } from './ejsTemplates.js';
+import {
+  stripP,
+  changeTags,
+  addDates,
+  makePages,
+  sortDate,
+} from './helpers.js';
+import { appInner, appOuter, schema } from './ejsTemplates.js';
 import ejs from 'ejs';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -18,10 +24,6 @@ const ROOT_URL = `https://cms-chesheast.cloud.contensis.com/`;
 const PROJECT = 'website';
 const pageSize = 10;
 const breadcrumb = "<li class='breadcrumb-item'>Rangers events listing</li>";
-
-const stripP = (str) => {
-  return str ? str.replace(/(&nbsp;)?<\/?p[^>]*>/g, '') : '';
-};
 
 async function getEntries(req, res) {
   const queries = req.url.split(/\?|&/);
@@ -94,7 +96,13 @@ async function getEntries(req, res) {
       <li class='breadcrumb-item'>${item.entryTitle}</li>`;
     const entryApp = createEntryApp(item);
     renderToString(entryApp).then((html) => {
-      res.render('index', { breadcrumb: bc, description, title, html, head_end });
+      res.render('index', {
+        breadcrumb: bc,
+        description,
+        title,
+        html,
+        head_end,
+      });
     });
     return;
   }
@@ -104,28 +112,42 @@ async function getEntries(req, res) {
     `${ROOT_URL}/api/delivery/projects/${PROJECT}/contenttypes/${contentType}/entries?accessToken=QCpZfwnsgnQsyHHB3ID5isS43cZnthj6YoSPtemxFGtcH15I`,
     { method: 'get' }
   );
-
   // Abort if no data from the CMS.
   if (resp.status !== 200) {
     res.sendFile(path.join(dir, 'index.html'));
     return;
   }
-
+  // Get the data
   const data = await response.json();
   let items = data.items.map((e) => addDates(e));
   items = items.map((e) => changeTags(e));
   items.sort(sortDate);
   const { btns, pages } = makePages([...items], pageSize);
-  const app = createListApp(items, title, pages, btns, pageSize);
+
+  // Create the app body by injecting the template.
+  const appBody = ejs.render(appInner, { template: listTemplate });
+
+  // Use this to create script tags to be added in the head element.
+  let head_end = ejs.render(appOuter, {
+    appBody,
+    items,
+    title,
+    pages,
+    btns,
+    pageSize,
+  });
+
+  // Create a function with the app body.
+  const createListApp = new Function(
+    'items, title, pages, btns, pageSize, createSSRApp',
+    appBody
+  );
+
+  // Make an instance of that function, with the data we need.
+  const app = createListApp(items, title, pages, btns, pageSize, createSSRApp);
+
+  // Render and send to client.
   renderToString(app).then((html) => {
-    let head_end = ejs.render(clientApp, {
-      items: items,
-      title: title,
-      pages: pages,
-      btns: btns,
-      pageSize: pageSize,
-      template: listTemplate,
-    });
     res.render('index', { breadcrumb, description, title, html, head_end });
   });
 }

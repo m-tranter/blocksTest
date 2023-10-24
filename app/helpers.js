@@ -13,6 +13,10 @@ const timeOptions = {
   hour12: true,
 };
 
+const stripP = (str) => {
+  return str ? str.replace(/(&nbsp;)?<\/?p[^>]*>/g, '') : '';
+};
+
 const makePages = (arr, pageSize) => {
   let count = arr.length;
   let pageCount = Math.ceil(count / pageSize);
@@ -54,4 +58,4 @@ const changeTags = (obj) => {
   return obj;
 };
 
-export { changeTags, addDates, makePages, sortDate };
+export { stripP, changeTags, addDates, makePages, sortDate };
