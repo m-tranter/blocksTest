@@ -12,7 +12,7 @@ const port = 3001;
 
 server.listen(port, (error) => {
   if (!error) {
-    console.log(`\nServer running on port ${port}.`);
+    console.log(`\nExpress running on port ${port}.`);
   } else {
     console.log(error);
   }
