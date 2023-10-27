@@ -18,6 +18,7 @@ import {
 import { appInner, appOuter, schema } from './ejsTemplates.js';
 import ejs from 'ejs';
 
+
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const dir = path.join(__dirname, '../public');
 const ROOT_URL = `https://cms-chesheast.cloud.contensis.com/`;
