@@ -80,7 +80,7 @@ const listTemplate = `
             <h2 class="fs-4">{{item.entryTitle}}</h2>
             <template v-if="item.startDate===item.endDate ">
               <p>{{item.startDate}}.</p>
-              <p>Time:{{item.startTime}}&nbsp;-{{item.endTime}}.</p></template
+              <p>Time:{{item.startTime}}&nbsp;to{{item.endTime}}.</p></template
             >
             <template v-else>
               <p>From{{item.startTime}}&nbsp;on&nbsp;{{item.startDate}}.</p>
