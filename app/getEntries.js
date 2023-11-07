@@ -9,13 +9,14 @@ import listTemplate from './listTemplate.js';
 import { createEntryApp } from './entryApp.js';
 import getSitemap from './getSitemap.js';
 import {
+  makeBC,
   stripP,
   changeTags,
   addDates,
   makePages,
   sortDate,
 } from './helpers.js';
-import { appInner, appOuter, schema } from './ejsTemplates.js';
+import { breadcrumb, appInner, appOuter, schema } from './ejsTemplates.js';
 import ejs from 'ejs';
 import {
   includes,
@@ -31,7 +32,6 @@ const dir = path.join(__dirname, '../public');
 const ROOT_URL = `https://cms-chesheast.cloud.contensis.com/`;
 const PROJECT = 'website';
 const pageSize = 10;
-const breadcrumb = "<li class='breadcrumb-item'>Rangers events listing</li>";
 
 async function getEntries(req, res) {
   const queries = req.url.split(/\?|&/);
@@ -72,6 +72,7 @@ async function getEntries(req, res) {
     ? stripP(item.excerpt)
     : stripP(item.entryDescription);
   const contentType = item.contentTypeAPIName || '';
+  let bc = makeBC(item);
 
   // When it's a single entry.
   if (!contentType) {
@@ -101,8 +102,6 @@ async function getEntries(req, res) {
       pub_date: item.sys.version.published,
     });
     item = changeTags(addDates(item));
-    let bc = `<li class='breadcrumb-item'><a href="/rangerevents/listing">Rangers events listing</a></li>
-      <li class='breadcrumb-item'>${item.entryTitle}</li>`;
     const entryApp = createEntryApp(item);
     renderToString(entryApp).then((html) => {
       res.render('index', {
@@ -170,7 +169,7 @@ async function getEntries(req, res) {
       footer,
       site_search,
       reachdeck,
-      breadcrumb,
+      breadcrumb: bc,
       description,
       title,
       html,
