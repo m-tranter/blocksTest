@@ -72,7 +72,9 @@ async function getEntries(req, res) {
     ? stripP(item.excerpt)
     : stripP(item.entryDescription);
   const contentType = item.contentTypeAPIName || '';
-  let bc = makeBC(item);
+  let bc_inner = makeBC(item);
+  let bc = ejs.render(breadcrumb, {bc_inner});
+  
 
   // When it's a single entry.
   if (!contentType) {

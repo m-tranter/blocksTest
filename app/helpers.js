@@ -66,7 +66,7 @@ const makeBC = (item) => {
   links = links.map(
     (e) => (e = `${e[0].toUpperCase()}${e.slice(1).toLowerCase()}`)
   );
-  links = links.map((e) => (e = e.replace(/leisure/i, 'leisure,')));
+  classic = classic.map((e) => (e = e.replace(/leisure/i, 'leisure,')));
   let bc_inner = links.reduce((acc, l, i) => {
     acc =
       i === links.length - 1
