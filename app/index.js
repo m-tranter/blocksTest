@@ -12,7 +12,7 @@ const port = 3001;
 
 server.listen(port, (error) => {
   if (!error) {
-    console.log(`\nExpress running on port ${port}.`);
+    console.log(`\nServer running on port ${port}.`);
   } else {
     console.log(error);
   }
@@ -26,7 +26,6 @@ const myLogger = function (req, _, next) {
 server.use(express.json());
 server.use(myLogger);
 server.set('view engine', 'ejs');
-
 server.set('views', path.join(__dirname, '../views'));
 
 server.get(/.*\.(js|css)$/, (req, res) => {

@@ -17,7 +17,14 @@ import {
 } from './helpers.js';
 import { appInner, appOuter, schema } from './ejsTemplates.js';
 import ejs from 'ejs';
-
+import {
+  includes,
+  reachdeck,
+  header,
+  footer,
+  cookies,
+  site_search,
+} from 'cec-block-templates';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const dir = path.join(__dirname, '../public');
@@ -68,6 +75,7 @@ async function getEntries(req, res) {
 
   // When it's a single entry.
   if (!contentType) {
+    // Adding the structured data for Google Events.
     let meeting_point = stripP(item.meetingPoint)
       .split(',')
       .map((e) => e.trim());
@@ -98,6 +106,12 @@ async function getEntries(req, res) {
     const entryApp = createEntryApp(item);
     renderToString(entryApp).then((html) => {
       res.render('index', {
+        includes,
+        cookies,
+        header,
+        footer,
+        site_search,
+        reachdeck,
         breadcrumb: bc,
         description,
         title,
@@ -110,7 +124,7 @@ async function getEntries(req, res) {
 
   // When it's a listing page.
   const response = await fetch(
-    `${ROOT_URL}/api/delivery/projects/${PROJECT}/contenttypes/${contentType}/entries?accessToken=QCpZfwnsgnQsyHHB3ID5isS43cZnthj6YoSPtemxFGtcH15I&pageSize=1000`,
+    `${ROOT_URL}/api/delivery/projects/${PROJECT}/contenttypes/${contentType}/entries?accessToken=QCpZfwnsgnQsyHHB3ID5isS43cZnthj6YoSPtemxFGtcH15I`,
     { method: 'get' }
   );
   // Abort if no data from the CMS.
@@ -149,7 +163,19 @@ async function getEntries(req, res) {
 
   // Render and send to client.
   renderToString(app).then((html) => {
-    res.render('index', { breadcrumb, description, title, html, head_end });
+    res.render('index', {
+      includes,
+      cookies,
+      header,
+      footer,
+      site_search,
+      reachdeck,
+      breadcrumb,
+      description,
+      title,
+      html,
+      head_end,
+    });
   });
 }
 

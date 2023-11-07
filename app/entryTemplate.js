@@ -31,7 +31,7 @@ const entryTemplate = `
         <h3>Details</h3>
         <template v-if="item.startDate === item.endDate">
           <p>
-            <strong>Time: </strong>{{item.startTime}}&nbsp;to{{item.endTime}}.
+            <strong>Time: </strong>{{item.startTime}}&nbsp;-{{item.endTime}}.
           </p></template
         >
         <template v-else>
