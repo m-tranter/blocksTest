@@ -29,6 +29,10 @@ const formatDate = (d) => {
   return d.toLocaleString('en-GB', dateOptions);
 };
 
+const prettyDate = (d) => {
+  return d.toLocaleDateString('en-GB', dateOptions);
+};
+
 const sortDate = (a, b) => {
   return a.dateStartEnd.from - b.dateStartEnd.from;
 };
@@ -58,26 +62,4 @@ const changeTags = (obj) => {
   return obj;
 };
 
-const makeBC = (item) => {
-  let item_path = item.sys.uri.slice(1);
-  let hrefs = item_path.split('/').map((e) => (e = `/${e}`));
-  let links = item_path.replace(/[-_]/g, ' ').split('/');
-  let classic = hrefs.map((e) => e.replace(/-/g, '_'));
-  links = links.map(
-    (e) => (e = `${e[0].toUpperCase()}${e.slice(1).toLowerCase()}`)
-  );
-  classic = classic.map((e) => (e = e.replace(/leisure/i, 'leisure,')));
-  let bc_inner = links.reduce((acc, l, i) => {
-    acc =
-      i === links.length - 1
-        ? `${acc}<li class="breadcrumb-item">${l}</li>`
-        : `${acc}<li class="breadcrumb-item"><a href="${classic
-            .slice(0, i + 1)
-            .join('')}">${l}</a></li>`;
-    return acc;
-  }, '');
-  return bc_inner;
-}
-
-
-export { makeBC, stripP, changeTags, addDates, makePages, sortDate };
+export { prettyDate, stripP, changeTags, addDates, makePages, sortDate };

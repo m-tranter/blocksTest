@@ -9,14 +9,14 @@ import listTemplate from './listTemplate.js';
 import { createEntryApp } from './entryApp.js';
 import getSitemap from './getSitemap.js';
 import {
-  makeBC,
+  prettyDate,
   stripP,
   changeTags,
   addDates,
   makePages,
   sortDate,
 } from './helpers.js';
-import { breadcrumb, appInner, appOuter, schema } from './ejsTemplates.js';
+import { appInner, appOuter, schema } from './ejsTemplates.js';
 import ejs from 'ejs';
 import {
   includes,
@@ -25,6 +25,7 @@ import {
   footer,
   cookies,
   site_search,
+  feedback,
 } from 'cec-block-templates';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -32,6 +33,7 @@ const dir = path.join(__dirname, '../public');
 const ROOT_URL = `https://cms-chesheast.cloud.contensis.com/`;
 const PROJECT = 'website';
 const pageSize = 10;
+const breadcrumb = "<li class='breadcrumb-item'>Rangers events listing</li>";
 
 async function getEntries(req, res) {
   const queries = req.url.split(/\?|&/);
@@ -72,9 +74,6 @@ async function getEntries(req, res) {
     ? stripP(item.excerpt)
     : stripP(item.entryDescription);
   const contentType = item.contentTypeAPIName || '';
-  let bc_inner = makeBC(item);
-  let bc = ejs.render(breadcrumb, {bc_inner});
-  
 
   // When it's a single entry.
   if (!contentType) {
@@ -104,6 +103,11 @@ async function getEntries(req, res) {
       pub_date: item.sys.version.published,
     });
     item = changeTags(addDates(item));
+    let bc = `<li class='breadcrumb-item'><a href="/rangerevents/listing">Rangers events listing</a></li>
+      <li class='breadcrumb-item'>${item.entryTitle}</li>`;
+    let item_path = item.sys.uri;
+    let published = prettyDate(new Date(item.sys.version.published));
+    let myFeedback = ejs.render(feedback, { published, item_path, title });
     const entryApp = createEntryApp(item);
     renderToString(entryApp).then((html) => {
       res.render('index', {
@@ -118,6 +122,7 @@ async function getEntries(req, res) {
         title,
         html,
         head_end,
+        feedback: myFeedback,
       });
     });
     return;
@@ -139,7 +144,9 @@ async function getEntries(req, res) {
   items = items.map((e) => changeTags(e));
   items.sort(sortDate);
   const { btns, pages } = makePages([...items], pageSize);
-
+  let item_path = item.sys.uri;
+  let published = prettyDate(new Date(item.sys.version.published));
+  let myFeedback = ejs.render(feedback, { published, item_path, title });
   // Create the app body by injecting the template.
   const appBody = ejs.render(appInner, { template: listTemplate });
 
@@ -171,11 +178,12 @@ async function getEntries(req, res) {
       footer,
       site_search,
       reachdeck,
-      breadcrumb: bc,
+      breadcrumb,
       description,
       title,
       html,
       head_end,
+      feedback: myFeedback,
     });
   });
 }
