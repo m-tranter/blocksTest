@@ -70,7 +70,7 @@ const listTemplate = `
             <img
               v-if="item.image !=null"
               class="img-fluid rounded featured-img"
-              v-bind:src="item.image.asset.sys.uri"
+              v-bind:src="item.image.asset.sys.uri + '?format=webp'"
               v-bind:alt="item.title"
             />
           </div>
