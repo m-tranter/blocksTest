@@ -93,9 +93,7 @@ const appInner = `
               this.pageBtns = Array.from({ length: this.pageCount }, (_, i) => i + 1);
               this.createPages();
               this.items = this.pages[0];
-              if (this.loaded) {
-                document.getElementById('contentTypesContainer').scrollIntoView();
-              } else {
+              if (!this.loaded) {
                 this.loaded = true;
               }
             },
@@ -105,7 +103,6 @@ const appInner = `
             ].map(() => this.searchedItems.splice(0, this.pageSize));
           },
           goToPage: function (i) {
-            document.getElementById('contentTypesContainer').scrollIntoView();
             this.pageIndex = i;
             this.lastSearch = this.searchTerm;
           },

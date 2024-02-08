@@ -140,6 +140,7 @@ async function getEntries(req, res) {
   }
   // Get the data
   const data = await response.json();
+  console.log(data.items.length);
   let items = data.items.map((e) => addDates(e));
   items = items.map((e) => changeTags(e));
   items.sort(sortDate);
