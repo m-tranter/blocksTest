@@ -100,9 +100,7 @@ export function createListApp(items, title, pages, btns, pageSize) {
         this.pageBtns = Array.from({ length: this.pageCount }, (_, i) => i + 1);
         this.createPages();
         this.items = this.pages[0];
-        if (this.loaded) {
-          document.getElementById('contentTypesContainer').scrollIntoView();
-        } else {
+        if (!this.loaded) {
           this.loaded = true;
         }
       },
