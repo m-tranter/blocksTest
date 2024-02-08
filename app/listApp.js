@@ -1,4 +1,5 @@
 'use strict';
+
 import listTemplate from './listTemplate.js';
 import { createSSRApp } from 'vue';
 
