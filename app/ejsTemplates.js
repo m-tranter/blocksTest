@@ -105,6 +105,7 @@ const appInner = `
           goToPage: function (i) {
             this.pageIndex = i;
             this.lastSearch = this.searchTerm;
+            document.getElementById('top').scrollIntoView();
           },
           applyFilters: function (cat) {
             const index = this.categoriesChecked.indexOf(cat);
