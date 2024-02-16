@@ -140,8 +140,7 @@ async function getEntries(req, res) {
   }
   // Get the data
   const data = await response.json();
-  console.log(data.items.length);
-  let items = data.items.map((e) => addDates(e));
+  let items = data.items.map((e) => addDates(e)).filter(e => e.title !== "TEST");
   items = items.map((e) => changeTags(e));
   items.sort(sortDate);
   const { btns, pages } = makePages([...items], pageSize);
