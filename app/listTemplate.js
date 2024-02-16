@@ -1,6 +1,6 @@
 const listTemplate = `
   <div id="contentTypesContainer">
-  <h1>{{h1}}</h1>
+  <h1 id="top">{{h1}}</h1>
   <div class="row events-container">
     <div class="col-lg-8">
       <nav
