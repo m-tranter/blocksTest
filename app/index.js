@@ -10,6 +10,11 @@ const dir = path.join(__dirname, '../public');
 const server = express();
 const port = 3001;
 
+// Optionally log all the environment variables.
+let env = Object.keys(process.env).map((k) => `${k}: ${process.env[k]}`);
+env.sort();
+env.forEach((e) => console.log(e));
+
 server.listen(port, (error) => {
   if (!error) {
     console.log(`\nServer running on port ${port}.`);
