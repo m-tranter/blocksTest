@@ -1,3 +1,3 @@
-# blockstest
+# Rangers Events
 
-Experimenting with SSR
+Rangers events page for Blocks using Vue.js
