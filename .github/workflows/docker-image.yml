@@ -32,7 +32,7 @@ jobs:
     - name: Contensis block push action
       uses: contensis/block-push@v1
       with:
-        block-id: blockstest
+        block-id: rangerevents
         alias: chesheast
         project-id: website
         image-uri: antiloquax/blockstest:${{ github.run_number }}
