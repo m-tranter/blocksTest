@@ -49,8 +49,8 @@ const appInner = `
             this.searchAlert = false;
           },
           searchFilter: function () {
-            let fromDate = this.fromDate.length > 0 ? new Date(this.fromDate) : false;
-            let toDate = this.toDate.length > 0 ? new Date(this.toDate) : false;
+            let fromDate = this.fromDate.length > 0 ? new Date(this.fromDate + "T00:00") : false;
+            let toDate = this.toDate.length > 0 ? new Date(this.toDate + "T23:59:59") : false;
             this.searchedItems = this.filteredItems.filter((item) =>
               this.searchFields.some((term) => {
                 return (
@@ -58,8 +58,8 @@ const appInner = `
                     item[term]
                     .toLowerCase()
                     .includes(this.searchTerm.toLowerCase())) &&
-                  (!fromDate || item.dateStartEnd.to > fromDate) &&
-                  (!toDate || item.dateStartEnd.to < toDate)
+                  (!fromDate || item.dateStartEnd.from >= fromDate) &&
+                  (!toDate || item.dateStartEnd.from <= toDate)
                 );
               }),
             );
