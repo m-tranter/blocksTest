@@ -1,13 +1,13 @@
-'use strict';
+"use strict";
 
-import { createSSRApp } from 'vue';
-import { renderToString } from 'vue/server-renderer';
-import fetch from 'node-fetch';
-import path from 'path';
-import { fileURLToPath } from 'url';
-import listTemplate from './listTemplate.js';
-import { createEntryApp } from './entryApp.js';
-import getSitemap from './getSitemap.js';
+import { createSSRApp } from "vue";
+import { renderToString } from "vue/server-renderer";
+import fetch from "node-fetch";
+import path from "path";
+import { fileURLToPath } from "url";
+import listTemplate from "./listTemplate.js";
+import { createEntryApp } from "./entryApp.js";
+import getSitemap from "./getSitemap.js";
 import {
   prettyDate,
   stripP,
@@ -15,9 +15,9 @@ import {
   addDates,
   makePages,
   sortDate,
-} from './helpers.js';
-import { appInner, appOuter, schema } from './ejsTemplates.js';
-import ejs from 'ejs';
+} from "./helpers.js";
+import { appInner, appOuter, schema } from "./ejsTemplates.js";
+import ejs from "ejs";
 import {
   includes,
   reachdeck,
@@ -26,65 +26,65 @@ import {
   cookies,
   site_search,
   feedback,
-} from 'cec-block-templates';
+} from "cec-block-templates";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
-const dir = path.join(__dirname, '../public');
+const dir = path.join(__dirname, "../public");
 const ROOT_URL = `https://cms-chesheast.cloud.contensis.com/`;
-const PROJECT = 'website';
+const PROJECT = "website";
 const pageSize = 10;
 const breadcrumb = "<li class='breadcrumb-item'>Rangers events listing</li>";
 
 async function getEntries(req, res) {
   const queries = req.url.split(/\?|&/);
-  let entryId = queries.find((k) => k.startsWith('entryId'));
+  let entryId = queries.find((k) => k.startsWith("entryId"));
   // Abort if no entryID.
   if (!entryId) {
-    res.sendFile(path.join(dir, 'index.html'));
+    res.sendFile(path.join(dir, "index.html"));
     return;
   } else {
     entryId = entryId.slice(8);
   }
 
   // Hard-coding this so that the link on leaflets works.
-  if (entryId === '00000000-0000-0000-0000-000000000000') {
-    entryId = 'ddebbc4f-2d11-4bfa-81f9-6fb19919d7ac';
+  if (entryId === "00000000-0000-0000-0000-000000000000") {
+    entryId = "ddebbc4f-2d11-4bfa-81f9-6fb19919d7ac";
   }
 
   // Get the entry from the query string.
   const resp = await fetch(
     `${ROOT_URL}/api/delivery/projects/${PROJECT}/entries/${entryId}/?accessToken=QCpZfwnsgnQsyHHB3ID5isS43cZnthj6YoSPtemxFGtcH15I`,
-    { method: 'get' }
+    { method: "get" },
   );
 
   // Abort if no data from the CMS.
   if (resp.status !== 200) {
-    res.sendFile(path.join(dir, 'index.html'));
+    res.sendFile(path.join(dir, "index.html"));
     return;
   }
 
   let item = await resp.json();
-  if (item.sys.contentTypeId === 'sitemaps') {
+  if (item.sys.contentTypeId === "sitemaps") {
     getSitemap(req, res, item.entryTitle);
     return;
   }
 
-  const title = item.title || '';
+  const title = item.title || "";
   const description = item.excerpt
     ? stripP(item.excerpt)
     : stripP(item.entryDescription);
-  const contentType = item.contentTypeAPIName || '';
+  const contentType = item.contentTypeAPIName || "";
 
   // When it's a single entry.
   if (!contentType) {
     // Adding the structured data for Google Events.
     let meeting_point = stripP(item.meetingPoint)
-      .split(',')
+      .split(",")
       .map((e) => e.trim());
     let postcode = meeting_point[meeting_point.length - 1]
-      .split(' ')
+      .split(" ")
       .slice(0, 2)
-      .join(' ');
+      .join(" ");
     let location = meeting_point[0];
     let address1 = meeting_point[1];
     let address2 = meeting_point[2];
@@ -110,7 +110,8 @@ async function getEntries(req, res) {
     let myFeedback = ejs.render(feedback, { published, item_path, title });
     const entryApp = createEntryApp(item);
     renderToString(entryApp).then((html) => {
-      res.render('index', {
+      res.render("index", {
+        image: `https://www.cheshireeast.gov.uk${item.image.asset.sys.uri}`,
         includes,
         cookies,
         header,
@@ -131,16 +132,18 @@ async function getEntries(req, res) {
   // When it's a listing page.
   const response = await fetch(
     `${ROOT_URL}/api/delivery/projects/${PROJECT}/contenttypes/${contentType}/entries?accessToken=QCpZfwnsgnQsyHHB3ID5isS43cZnthj6YoSPtemxFGtcH15I&pageSize=1000`,
-    { method: 'get' }
+    { method: "get" },
   );
   // Abort if no data from the CMS.
   if (resp.status !== 200) {
-    res.sendFile(path.join(dir, 'index.html'));
+    res.sendFile(path.join(dir, "index.html"));
     return;
   }
   // Get the data
   const data = await response.json();
-  let items = data.items.map((e) => addDates(e)).filter(e => e.title !== "TEST");
+  let items = data.items
+    .map((e) => addDates(e))
+    .filter((e) => e.title !== "TEST");
   items = items.map((e) => changeTags(e));
   items.sort(sortDate);
   const { btns, pages } = makePages([...items], pageSize);
@@ -162,8 +165,8 @@ async function getEntries(req, res) {
 
   // Create a function with the app body.
   const createListApp = new Function(
-    'items, title, pages, btns, pageSize, createSSRApp',
-    appBody
+    "items, title, pages, btns, pageSize, createSSRApp",
+    appBody,
   );
 
   // Make an instance of that function, with the data we need.
@@ -171,7 +174,8 @@ async function getEntries(req, res) {
 
   // Render and send to client.
   renderToString(app).then((html) => {
-    res.render('index', {
+    res.render("index", {
+      image: "https://www.cheshireeast.gov.uk/images/non_user/cec-og.png",
       includes,
       cookies,
       header,

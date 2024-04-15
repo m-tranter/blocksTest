@@ -184,7 +184,6 @@ const schema = `
 `;
 
 const appOuter = `
-  <meta property="og:image" content="<%- image %>">
   <script type="importmap">
     {
       "imports": {
