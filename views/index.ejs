@@ -1,16 +1,21 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="description" content="<%= description %>" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <%- includes %>
-    <title><%= title%></title>
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="description" content="<%= description %>" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta property="og:image" content="<%- image %>">
+  <%- includes %>
+    <title>
+      <%= title%>
+    </title>
     <%- reachdeck %>
-    <%- head_end %>
-  </head>
-  <body>
-    <%- header %>
+      <%- head_end %>
+</head>
+
+<body>
+  <%- header %>
     <div class="cec-breadcrumb-bg">
       <div class="container">
         <div class="row">
@@ -21,18 +26,15 @@
                   <a href="/home.aspx">Home</a>
                 </li>
                 <li class="breadcrumb-item">
-                  <a href="/leisure,_culture_and_tourism/libraries-and-leisure.aspx"
-                    >Leisure, Culture and Tourism</a
-                  >
+                  <a href="/leisure,_culture_and_tourism/libraries-and-leisure.aspx">Leisure, Culture and Tourism</a>
                 </li>
-                    <li class="breadcrumb-item">
-                      <a
-                        href="/leisure,_culture_and_tourism/ranger_service/ranger_service.aspx"
-                        >Ranger Service</a
-                      >
-                    </li>
-                        <li class="breadcrumb-item"><a href="/leisure,_culture_and_tourism/ranger_service/ranger_events/ranger_events.aspx">Ranger events</a></li>
-                        <%- breadcrumb %>
+                <li class="breadcrumb-item">
+                  <a href="/leisure,_culture_and_tourism/ranger_service/ranger_service.aspx">Ranger Service</a>
+                </li>
+                <li class="breadcrumb-item"><a
+                    href="/leisure,_culture_and_tourism/ranger_service/ranger_events/ranger_events.aspx">Ranger
+                    events</a></li>
+                <%- breadcrumb %>
               </ol>
             </nav>
           </div>
@@ -43,8 +45,9 @@
       <div id="app" class="mt-3"><%- html %></div>
     </div>
     <%- feedback %>
-    <%- footer %>
-    <%- cookies %>
-    <%- site_search %>
-  </body>
+      <%- footer %>
+        <%- cookies %>
+          <%- site_search %>
+</body>
+
 </html>
