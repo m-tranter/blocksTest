@@ -1,4 +1,4 @@
-'use strict';
+"use strict";
 
 const appInner = `
         return createSSRApp({
@@ -184,10 +184,11 @@ const schema = `
 `;
 
 const appOuter = `
+  <meta property="og:image" content="<%- image %>">
   <script type="importmap">
     {
       "imports": {
-        "vue": "https://unpkg.com/vue@3.4.21/dist/vue.esm-browser.prod.js"
+        "vue": "https://unpkg.com/vue@3/dist/vue.esm-browser.prod.js"
       }
     }
   </script>
@@ -197,7 +198,7 @@ const appOuter = `
         <%- appBody %>
       }
       createApp(<%- JSON.stringify(items) %>, <%- JSON.stringify(title) %>, <%- JSON.stringify(pages) %>, <%- JSON.stringify(btns) %>, <%= pageSize %>).mount('#app');
-</script>
+  </script>
 `;
 
 const breadcrumb = `
@@ -208,7 +209,7 @@ const breadcrumb = `
             <nav class="no-print-url" aria-label="breadcrumb">
               <ol class="breadcrumb cec-breadcrumb my-0 py-2">
                <%- bc_inner %>
-                </ol>
+              </ol>
             </nav>
           </div>
         </div>
