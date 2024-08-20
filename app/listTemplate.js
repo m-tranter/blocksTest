@@ -3,54 +3,76 @@ const listTemplate = `
   <h1 id="top">{{h1}}</h1>
   <div class="row events-container">
     <div class="col-lg-8">
-      <nav
-        v-if="pageCount > 1"
-        role="navigation"
-        aria-label="Results data navigation"
+    <nav
+      v-if="pages.length > 1"
+      role="navigation"
+      aria-label="Results data navigation"
+    >
+      <ol class="pagination d-flex flex-wrap my-2 ms-0">
+        <li class="page-item mb-2">
+          <button
+            class="page-link rounded"
+            type="button"
+            aria-label="First"
+            :class="{ disabled: !pageIndex }"
+            @click="goToPage(0)"
+          >
+            First
+          </button>
+        </li>
+        <li class="page-item mb-2">
+          <button
+            class="page-link rounded"
+            type="button"
+            aria-label="Previous"
+            :class="{ disabled: !pageIndex }"
+            @click="goToPage(pageIndex - 1)"
+          >
+            Previous
+          </button>
+        </li>
+        <li class="page-item mb-2 rounded disabled current">
+          <button class="page-link rounded" type="button">
+            {{ pageIndex + 1 }}
+          </button>
+        </li>
+        <li class="page-item mb-2">
+          <button
+            class="page-link rounded"
+            type="button"
+            aria-label="Next"
+            :class="{ disabled: pageIndex + 1 === pages.length }"
+            @click="goToPage(pageIndex + 1)"
+          >
+            Next
+          </button>
+        </li>
+        <li class="page-item mb-2">
+          <button
+            class="page-link rounded"
+            type="button"
+            aria-label="Last"
+            :class="{ disabled: pageIndex === pages.length - 1 }"
+            @click="goToPage(pages.length - 1)"
+          >
+            Last
+          </button>
+        </li>
+      </ol>
+    </nav>
+    <p>
+      <span 
+        >Total results:
+        {{
+          pages.reduce((acc, p) => {
+            return acc + p.length;
+          }, 0)
+        }}.&nbsp;</span
       >
-        <ul class="pagination d-flex flex-wrap mb-2 ms-0">
-          <li class="page-item" v-bind:class="{disabled: pageIndex===0}">
-            <button
-              class="page-link"
-              type="button"
-              v-on:click="goToPage(pageIndex - 1)"
-            >
-              Previous
-            </button>
-          </li>
-          <li
-            v-for="(pageBtn, i) in pageBtns"
-            class="page-item"
-            v-bind:class="{disabled: pageIndex===i}"
-            v-bind:key="pageBtn"
-          >
-            <button class="page-link" type="button" v-on:click="goToPage(i)">
-              {{pageBtn}}
-            </button>
-          </li>
-          <li
-            class="page-item"
-            v-bind:class="{disabled: pageIndex + 1 >=pageCount}"
-          >
-            <button
-              class="page-link"
-              type="button"
-              v-on:click="goToPage(pageIndex + 1)"
-            >
-              Next
-            </button>
-          </li>
-        </ul>
-      </nav>
-      <div class="api-results-info">
-        <p>Total results: <strong>{{totalCount}}</strong></p>
-        <p class="d-block" v-if="!totalCount">
-          Try clearing filters and/or searches.
-        </p>
-        <p v-if="pageCount > 1">
-          Current page: <strong>{{pageIndex + 1}}</strong>
-        </p>
-      </div>
+      <span v-if="pages.length > 1"
+        >Viewing page {{ pageIndex + 1 }} of {{ pages.length }}.</span
+      >
+    </p>
       <div v-for="(_, i) in pages" :key="i" v-show="i===pageIndex">
         <div
           v-for="item in pages[i]"
@@ -97,7 +119,7 @@ const listTemplate = `
         role="navigation"
         aria-label="Results data navigation"
       >
-        <ul class="pagination d-flex flex-wrap mb-2 ms-0">
+        <ul class="pooagination d-flex flex-wrap mb-2 ms-0">
           <li class="page-item" v-bind:class="{disabled: pageIndex===0}">
             <button
               class="page-link"
