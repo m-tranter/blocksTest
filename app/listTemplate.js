@@ -114,45 +114,63 @@ const listTemplate = `
           </div>
         </div>
       </div>
-      <nav
-        v-if="pageCount > 1"
-        role="navigation"
-        aria-label="Results data navigation"
-      >
-        <ul class="pooagination d-flex flex-wrap mb-2 ms-0">
-          <li class="page-item" v-bind:class="{disabled: pageIndex===0}">
-            <button
-              class="page-link"
-              type="button"
-              v-on:click="goToPage(pageIndex)"
-            >
-              Previous
-            </button>
-          </li>
-          <li
-            v-for="(pageBtn, i) in pageBtns"
-            class="page-item"
-            v-bind:class="{disabled: pageIndex===i}"
-            v-bind:key="pageBtn"
+    <nav
+      v-if="pages.length > 1"
+      role="navigation"
+      aria-label="Results data navigation"
+    >
+      <ol class="pagination d-flex flex-wrap my-2 ms-0">
+        <li class="page-item mb-2">
+          <button
+            class="page-link rounded"
+            type="button"
+            aria-label="First"
+            :class="{ disabled: !pageIndex }"
+            @click="goToPage(0)"
           >
-            <button class="page-link" type="button" v-on:click="goToPage(i)">
-              {{pageBtn}}
-            </button>
-          </li>
-          <li
-            class="page-item"
-            v-bind:class="{disabled: pageIndex + 1 >=pageCount}"
+            First
+          </button>
+        </li>
+        <li class="page-item mb-2">
+          <button
+            class="page-link rounded"
+            type="button"
+            aria-label="Previous"
+            :class="{ disabled: !pageIndex }"
+            @click="goToPage(pageIndex - 1)"
           >
-            <button
-              class="page-link"
-              type="button"
-              v-on:click="goToPage(pageIndex + 1)"
-            >
-              Next
-            </button>
-          </li>
-        </ul>
-      </nav>
+            Previous
+          </button>
+        </li>
+        <li class="page-item mb-2 rounded disabled current">
+          <button class="page-link rounded" type="button">
+            {{ pageIndex + 1 }}
+          </button>
+        </li>
+        <li class="page-item mb-2">
+          <button
+            class="page-link rounded"
+            type="button"
+            aria-label="Next"
+            :class="{ disabled: pageIndex + 1 === pages.length }"
+            @click="goToPage(pageIndex + 1)"
+          >
+            Next
+          </button>
+        </li>
+        <li class="page-item mb-2">
+          <button
+            class="page-link rounded"
+            type="button"
+            aria-label="Last"
+            :class="{ disabled: pageIndex === pages.length - 1 }"
+            @click="goToPage(pages.length - 1)"
+          >
+            Last
+          </button>
+        </li>
+      </ol>
+    </nav>
     </div>
     <div class="col-lg-4 mt-0 mt-lg-5">
       <div
