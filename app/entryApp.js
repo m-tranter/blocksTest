@@ -10,7 +10,7 @@ export function createEntryApp(item) {
     }),
     methods: {
       gmap: function (item) {
-          return `https://maps.google.com/maps/dir/${item.mapLocation.lat},${item.mapLocation.lon}`;
+          return `https://maps.google.com/maps/dir//${item.mapLocation.lat},${item.mapLocation.lon}`;
       },
     },
     template: entryTemplate,
